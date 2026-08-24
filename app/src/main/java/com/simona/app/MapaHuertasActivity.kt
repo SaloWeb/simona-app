@@ -100,6 +100,18 @@ class MapaHuertasActivity : AppCompatActivity() {
             startActivity(SeleccionarPerfilActivity.crearIntent(this))
         }
 
+        // Setup theme toggle button (light / dark)
+        val btnTheme = findViewById<View>(R.id.btnThemeToggle)
+        btnTheme?.setOnClickListener {
+            val currentlyDark = ThemePrefs.isDark(this)
+            ThemePrefs.setDark(this, !currentlyDark)
+            // Update icon immediately and recreate to apply theme changes
+            updateThemeIcon(!currentlyDark)
+            recreate()
+        }
+        // Initialize icon based on current preference
+        updateThemeIcon(ThemePrefs.isDark(this))
+
         tabBtnLista.setOnClickListener { cambiarPestana("lista") }
         tabBtnMapa.setOnClickListener { cambiarPestana("mapa") }
 
@@ -720,6 +732,16 @@ class MapaHuertasActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    private fun updateThemeIcon(dark: Boolean) {
+        val btn = findViewById<ImageView?>(R.id.btnThemeToggle)
+        btn ?: return
+        if (dark) {
+            btn.setImageResource(R.drawable.ic_luna)
+        } else {
+            btn.setImageResource(R.drawable.ic_sol)
+        }
     }
 
     private fun abrirDashboardHuerta(huerta: Huerta) {

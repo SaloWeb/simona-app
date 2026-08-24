@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Simona" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Simona" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/simona_azul</item>
-        <item name="colorPrimaryVariant">@color/simona_azul_oscuro</item>
+        <item name="colorPrimaryContainer">@color/simona_azul_suave</item>
         <item name="colorOnPrimary">@color/simona_on_color</item>
         <item name="colorSecondary">@color/simona_verde_claro</item>
+        <item name="colorSecondaryContainer">@color/simona_verde_suave</item>
         <item name="colorOnSecondary">@color/simona_on_accent</item>
+        <item name="colorSurface">@color/simona_superficie</item>
+        <item name="colorSurfaceVariant">@color/simona_superficie_2</item>
+        <item name="colorOnSurface">@color/simona_tinta</item>
+        <item name="colorOutline">@color/simona_linea</item>
         <item name="android:statusBarColor">@color/simona_azul_header</item>
         <item name="android:navigationBarColor">@color/simona_blanco</item>
         <item name="android:windowBackground">@color/simona_superficie</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="materialButtonStyle">@style/Widget.Simona.Button</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Simona.BodyLarge</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Simona.TitleLarge</item>
     </style>
 
-    <style name="Widget.Simona.Button" parent="Widget.MaterialComponents.Button">
-        <item name="cornerRadius">12dp</item>
+    <style name="TextAppearance.Simona.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/simona_tinta</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Simona.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/simona_tinta</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.Simona.Button" parent="Widget.Material3.Button">
+        <item name="cornerRadius">14dp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:letterSpacing">0</item>
+        <item name="android:minHeight">48dp</item>
     </style>
 
     <style name="Widget.Simona.Button.Primary" parent="Widget.Simona.Button">
@@ -37,16 +57,16 @@
         <item name="cornerRadius">10dp</item>
     </style>
 
-    <style name="TextAppearance.Simona" parent="TextAppearance.MaterialComponents.Body1" />
+    <style name="TextAppearance.Simona" parent="TextAppearance.Material3.BodyLarge" />
 
-    <style name="TextAppearance.Simona.HeaderTitle" parent="TextAppearance.Simona">
+    <style name="TextAppearance.Simona.HeaderTitle" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:textColor">@color/simona_on_color</item>
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">0.02</item>
     </style>
 
-    <style name="TextAppearance.Simona.HeaderSubtitle" parent="TextAppearance.Simona">
+    <style name="TextAppearance.Simona.HeaderSubtitle" parent="TextAppearance.Material3.BodyMedium">
         <item name="android:textColor">@color/simona_on_header_muted</item>
         <item name="android:textSize">13sp</item>
     </style>
@@ -65,8 +85,9 @@
          sistema retira la splash: el mismo NoActionBar que ya usaba
          SplashActivity antes de este cambio. -->
     <style name="Theme.Simona.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/simona_splash_bg</item>
+        <item name="windowSplashScreenBackground">@drawable/bg_splash_screen</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo_simona</item>
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
         <item name="postSplashScreenTheme">@style/Theme.Simona.NoActionBar</item>
     </style>
 
@@ -76,7 +97,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
-        <item name="android:textColor">@color/simona_dark_gray</item>
+        <item name="android:textColor">@color/simona_tinta</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -101,11 +122,12 @@
         <item name="android:layout_width">64dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/simona_dark_gray</item>
+        <item name="android:textColor">@color/simona_tinta</item>
         <item name="android:gravity">center</item>
         <item name="android:maxLines">1</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
+        <item name="android:backgroundTint">@color/simona_superficie_2</item>
     </style>
 
     <style name="RangoGuion">
@@ -128,9 +150,9 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="trackColorActive">@color/simona_azul</item>
-        <item name="trackColorInactive">@color/simona_light_gray</item>
+        <item name="trackColorInactive">@color/simona_linea</item>
         <item name="thumbColor">@color/simona_azul</item>
-        <item name="haloColor">@color/simona_azul</item>
+        <item name="haloColor">@color/simona_azul_suave</item>
     </style>
 
 </resources>

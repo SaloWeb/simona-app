@@ -3,27 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:animateLayoutChanges="true"
     android:background="@color/simona_card_bg"
+    android:orientation="vertical"
     android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_ai_chat"
-            app:tint="@color/simona_verde" />
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_icon_circle"
+            android:backgroundTint="@color/simona_verde_suave">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_ai_chat"
+                app:tint="@color/simona_verde" />
+        </FrameLayout>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="10dp"
+            android:layout_weight="1"
             android:text="@string/asistente_titulo"
             android:textColor="@color/simona_tinta"
             android:textSize="17sp"
@@ -43,10 +52,10 @@
             android:id="@+id/tvHistorialChat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lineSpacingExtra="3dp"
             android:text="@string/asistente_bienvenida"
             android:textColor="@color/simona_tinta"
-            android:textSize="13sp"
-            android:lineSpacingExtra="3dp" />
+            android:textSize="13sp" />
 
     </ScrollView>
 
@@ -62,39 +71,40 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="12dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/etPreguntaChat"
             android:layout_width="0dp"
-            android:layout_height="46dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:background="@drawable/bg_card_huerta"
             android:hint="@string/asistente_hint"
-            android:textSize="13sp"
-            android:textColor="@color/simona_tinta"
+            android:inputType="textCapSentences"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:inputType="textCapSentences" />
+            android:textColor="@color/simona_tinta"
+            android:textColorHint="@color/simona_tinta_suave"
+            android:textSize="13sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEnviarChat"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:backgroundTint="@color/simona_verde_claro"
             android:contentDescription="@string/enviar"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:padding="0dp"
+            app:cornerRadius="24dp"
             app:icon="@drawable/ic_enviar"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconSize="18dp"
-            app:iconTint="@color/simona_on_accent"
-            app:cornerRadius="23dp" />
+            app:iconTint="@color/simona_on_accent" />
 
     </LinearLayout>
 

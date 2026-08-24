@@ -5,48 +5,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/simona_superficie">
+    android:background="@color/simona_superficie"
+    android:animateLayoutChanges="true">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="88dp">
+            android:paddingBottom="96dp">
 
-            <!-- Header de marca -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@drawable/bg_header"
+                android:orientation="vertical"
                 android:paddingStart="20dp"
-                android:paddingEnd="20dp"
                 android:paddingTop="18dp"
-                android:paddingBottom="22dp">
+                android:paddingEnd="20dp"
+                android:paddingBottom="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="@dimen/simona_header_logo"
                         android:layout_height="@dimen/simona_header_logo"
-                        android:src="@drawable/logo_simona"
                         android:contentDescription="@string/app_name"
-                        android:scaleType="fitCenter" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/logo_simona" />
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginStart="12dp"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
@@ -58,27 +59,42 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="1dp"
+                            android:layout_marginTop="2dp"
                             android:text="@string/home_subtitulo"
                             android:textAppearance="@style/TextAppearance.Simona.HeaderSubtitle" />
-
                     </LinearLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnNuevaHuerta"
-                        style="@style/Widget.Simona.Button.Header"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/nueva_huerta"
-                        app:icon="@drawable/ic_agregar"
-                        app:iconGravity="textStart"
-                        app:iconPadding="4dp"
-                        app:iconTint="@color/simona_on_accent"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="14dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
+                        <ImageView
+                            android:id="@+id/btnThemeToggle"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_luna"
+                            android:contentDescription="Toggle theme"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            app:tint="@color/simona_on_accent" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnNuevaHuerta"
+                            style="@style/Widget.Simona.Button.Header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="14dp"
+                            android:text="@string/nueva_huerta"
+                            app:icon="@drawable/ic_agregar"
+                            app:iconGravity="textStart"
+                            app:iconPadding="4dp"
+                            app:iconTint="@color/simona_on_accent" />
+
+                    </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
@@ -92,18 +108,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="3"
                     android:visibility="gone"
+                    android:weightSum="3"
                     tools:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
                         android:layout_weight="1"
-                        android:layout_marginEnd="4dp"
                         android:background="@drawable/bg_chip_resumen"
-                        android:orientation="vertical"
                         android:gravity="center"
+                        android:orientation="vertical"
                         android:padding="12dp">
 
                         <TextView
@@ -123,18 +139,17 @@
                             android:textColor="@color/simona_tinta_suave"
                             android:textSize="11sp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
                         android:layout_weight="1"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginEnd="2dp"
                         android:background="@drawable/bg_chip_resumen"
-                        android:orientation="vertical"
                         android:gravity="center"
+                        android:orientation="vertical"
                         android:padding="12dp">
 
                         <TextView
@@ -154,17 +169,16 @@
                             android:textColor="@color/simona_tinta_suave"
                             android:textSize="11sp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
                         android:layout_weight="1"
-                        android:layout_marginStart="4dp"
                         android:background="@drawable/bg_chip_resumen"
-                        android:orientation="vertical"
                         android:gravity="center"
+                        android:orientation="vertical"
                         android:padding="12dp">
 
                         <TextView
@@ -184,9 +198,7 @@
                             android:textColor="@color/simona_tinta_suave"
                             android:textSize="11sp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -195,8 +207,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:background="@drawable/bg_chip_resumen"
-                    android:padding="4dp"
                     android:orientation="horizontal"
+                    android:padding="4dp"
                     android:visibility="gone"
                     tools:visibility="visible">
 
@@ -206,57 +218,57 @@
                         android:layout_height="40dp"
                         android:layout_weight="1"
                         android:backgroundTint="@color/simona_azul_suave"
+                        android:elevation="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
                         android:text="@string/home_tab_lista"
                         android:textAllCaps="false"
                         android:textColor="@color/simona_azul"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        android:elevation="0dp"
                         app:cornerRadius="8dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/tabBtnMapa"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:layout_weight="1"
                         android:layout_marginStart="4dp"
+                        android:layout_weight="1"
                         android:backgroundTint="@color/simona_card_bg"
+                        android:elevation="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
                         android:text="@string/home_tab_mapa"
                         android:textAllCaps="false"
                         android:textColor="@color/simona_tinta_suave"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        android:elevation="0dp"
                         app:cornerRadius="8dp" />
-
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/estadoVacio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_marginTop="18dp"
+                    android:background="@drawable/bg_chip_resumen"
                     android:gravity="center"
-                    android:padding="36dp"
+                    android:orientation="vertical"
+                    android:padding="32dp"
                     android:visibility="gone"
                     tools:visibility="visible">
 
                     <FrameLayout
-                        android:layout_width="72dp"
-                        android:layout_height="72dp"
+                        android:layout_width="78dp"
+                        android:layout_height="78dp"
                         android:background="@drawable/bg_icon_circle">
 
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_brote"
-                            android:contentDescription="@null" />
-
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_brote" />
                     </FrameLayout>
 
                     <TextView
@@ -266,18 +278,18 @@
                         android:gravity="center"
                         android:text="@string/home_vacio_titulo"
                         android:textColor="@color/simona_tinta"
-                        android:textSize="17sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center"
+                        android:lineSpacingExtra="2dp"
                         android:text="@string/home_vacio_texto"
                         android:textColor="@color/simona_tinta_suave"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="2dp" />
+                        android:textSize="14sp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnNuevaHuertaVacio"
@@ -288,40 +300,38 @@
                         android:text="@string/crear_primera_huerta"
                         app:icon="@drawable/ic_agregar"
                         app:iconTint="@color/simona_on_color" />
-
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/seccionLista"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="14dp">
+                    android:layout_marginTop="14dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvContadorHuertas"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/home_tus_huertas"
                         android:textColor="@color/simona_tinta"
                         android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="10dp" />
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/listaHeatmapsContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical" />
-
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/seccionMapa"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginTop="14dp"
+                    android:orientation="vertical"
                     android:visibility="gone">
 
                     <FrameLayout
@@ -338,13 +348,9 @@
                         android:text="@string/home_mapa_hint"
                         android:textColor="@color/simona_tinta_suave"
                         android:textSize="12sp" />
-
                 </LinearLayout>
-
             </LinearLayout>
-
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -354,9 +360,10 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
         android:backgroundTint="@color/simona_verde_claro"
+        android:contentDescription="@string/asistente_titulo"
         android:src="@drawable/ic_ai_chat"
-        app:tint="@color/simona_on_accent"
-        app:elevation="6dp"
-        android:contentDescription="@string/asistente_titulo" />
-
+        app:elevation="8dp"
+        app:fabSize="normal"
+        app:tint="@color/simona_on_accent" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

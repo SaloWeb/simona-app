@@ -12,6 +12,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/simona_superficie"
     android:fillViewport="true">
 
@@ -77,14 +78,10 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnUsarRecomendados"
+                style="@style/Widget.Simona.Button.Accent"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:backgroundTint="#8DC035"
-                android:text="@string/usar_valores_recomendados"
-                android:textAllCaps="false"
-                android:textColor="#262626"
-                android:textStyle="bold"
-                app:cornerRadius="12dp" />
+                android:text="@string/usar_valores_recomendados" />
 
             <TextView
                 android:id="@+id/linkAjustarManualmente"
@@ -94,9 +91,9 @@
                 android:layout_marginTop="14dp"
                 android:padding="6dp"
                 android:text="@string/ajustar_manualmente"
-                android:textColor="#1A75B3"
-                android:textStyle="bold"
-                android:textSize="13sp" />
+                android:textColor="@color/simona_azul"
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
             <!-- Grupo de sliders, oculto hasta tocar "Ajustar manualmente" -->
             <LinearLayout
@@ -200,16 +197,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnContinuar"
+                style="@style/Widget.Simona.Button.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="20dp"
-                android:backgroundTint="#1A75B3"
                 android:text="@string/continuar"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
                 android:visibility="gone"
-                app:cornerRadius="12dp"
                 tools:visibility="visible" />
 
         </LinearLayout>

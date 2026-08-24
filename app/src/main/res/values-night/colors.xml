@@ -11,6 +11,7 @@
     <color name="simona_verde">#82B23E</color>
     <color name="simona_verde_suave">#263118</color>
     <color name="simona_marron_suave">#2E2115</color>
+    <color name="simona_azul_header_2">#1B5D88</color>
 
     <color name="simona_tinta">#EDE9E1</color>
     <color name="simona_tinta_suave">#A39C8E</color>
@@ -18,6 +19,7 @@
     <color name="simona_blanco">#17150F</color>
     <color name="simona_card_bg">#211E17</color>
     <color name="simona_superficie">#1C1913</color>
+    <color name="simona_superficie_2">#221F1A</color>
     <color name="simona_rojo_suave">#3A1F1F</color>
     <color name="simona_azul_suave">#1A2E3A</color>
 

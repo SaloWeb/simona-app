@@ -4,31 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
-    app:cardCornerRadius="@dimen/simona_radio_sm"
-    app:cardElevation="0dp"
+    android:layout_margin="8dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="@color/simona_card_bg"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
     app:strokeColor="@color/simona_linea"
     app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:gravity="center"
-        android:padding="16dp">
+        android:orientation="vertical"
+        android:padding="18dp">
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
             android:background="@drawable/bg_icon_circle">
 
             <ImageView
                 android:id="@+id/ivIconoPerfil"
-                android:layout_width="@dimen/simona_perfil_icon"
-                android:layout_height="@dimen/simona_perfil_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_gravity="center"
                 android:contentDescription="@null"
+                android:scaleType="centerInside"
+                app:tint="@color/simona_azul"
                 tools:src="@drawable/ic_perfil_hoja" />
 
         </FrameLayout>
@@ -37,23 +42,23 @@
             android:id="@+id/tvNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:textColor="@color/simona_tinta"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="@color/simona_tinta"
-            android:gravity="center"
             tools:text="Hoja" />
 
         <TextView
             android:id="@+id/tvEjemplos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textSize="11sp"
-            android:textColor="@color/simona_tinta_suave"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"
-            android:ellipsize="end"
+            android:textColor="@color/simona_tinta_suave"
+            android:textSize="11sp"
             tools:text="Lechuga, espinaca, acelga, rúcula" />
 
     </LinearLayout>

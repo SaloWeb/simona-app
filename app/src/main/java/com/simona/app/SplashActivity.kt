@@ -37,6 +37,10 @@ class SplashActivity : AppCompatActivity() {
         // Theme.Simona.Splash) mientras esta Activity termina de arrancar.
         installSplashScreen()
 
+        // Aplicar el tema elegido por el usuario (light / dark) antes de
+        // que se inflen vistas para que el sistema mantenga coherencia.
+        ThemePrefs.applyTheme(applicationContext)
+
         super.onCreate(savedInstanceState)
 
         // SimonaApp.onCreate() ya inicializa el repo, pero lo tocamos acá
