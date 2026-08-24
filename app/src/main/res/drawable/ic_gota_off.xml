@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Gota en contorno al 55% de opacidad (opacity:0.55 en el original) -->
+    <path
+        android:pathData="M12,2.8s6.5,7.4 6.5,12A6.5,6.5 0 1,1 5.5,14.8C5.5,10.2 12,2.8 12,2.8Z"
+        android:strokeColor="@color/simona_tinta"
+        android:strokeAlpha="0.55"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000" />
+    <!-- Línea diagonal que la tacha -->
+    <path
+        android:pathData="M4,4l16,16"
+        android:strokeColor="@color/simona_tinta"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000" />
+</vector>

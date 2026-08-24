@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- =====================================================================
+         Paleta de marca SIMONA — alineada al logo (gota + circuito + brote)
+         y al dashboard del simulador. Tierra / agua / cultivo.
+         ===================================================================== -->
+
+    <!-- Azul — tecnología / agua -->
+    <color name="simona_azul">#1A6FA8</color>
+    <color name="simona_azul_oscuro">#0F4C73</color>
+    <color name="simona_azul_suave">#E7F1F8</color>
+    <color name="simona_azul_header">#0B3A5C</color>
+
+    <!-- Verde — cultivo -->
+    <color name="simona_verde">#3F6B17</color>
+    <color name="simona_verde_claro">#6FA330</color>
+    <color name="simona_verde_suave">#EEF4E4</color>
+    <color name="simona_verde_logo">#8DC035</color>
+
+    <!-- Marrón — tierra -->
+    <color name="simona_marron">#8A5A34</color>
+    <color name="simona_marron_oscuro">#6B4527</color>
+    <color name="simona_marron_suave">#F5EDE4</color>
+
+    <!-- Alertas -->
+    <color name="simona_rojo">#C23B3B</color>
+    <color name="simona_rojo_suave">#F8EAEA</color>
+
+    <!-- Neutros / tinta — adaptativos (values-night) -->
+    <color name="simona_tinta">#24211D</color>
+    <color name="simona_tinta_suave">#6E685F</color>
+    <color name="simona_linea">#E4DFD6</color>
+    <color name="simona_blanco">#FFFFFF</color>
+    <color name="simona_card_bg">#FFFFFF</color>
+    <color name="simona_superficie">#F7F5F1</color>
+    <color name="simona_scrim">#CC24211D</color>
+
+    <!-- Sobre superficies de color fijas -->
+    <color name="simona_on_color">#FFFFFF</color>
+    <color name="simona_on_accent">#24211D</color>
+    <color name="simona_on_header_muted">#B8D4E8</color>
+
+    <!-- Launcher / splash (fondo del logo) -->
+    <color name="ic_launcher_background">#000000</color>
+    <color name="simona_splash_bg">#000000</color>
+
+    <!-- Toast -->
+    <color name="simona_toast_bg">#FFFFFF</color>
+    <color name="simona_toast_text">#24211D</color>
+    <color name="simona_toast_border">#E4DFD6</color>
+
+    <color name="simona_spark_color">#1A6FA8</color>
+
+    <!-- Estados de humedad -->
+    <color name="simona_estado_seco">#C97A2B</color>
+    <color name="simona_estado_optimo">#8DC035</color>
+    <color name="simona_estado_humedo">#1A75B3</color>
+
+    <!-- Alias legacy -->
+    <color name="simona_blue">@color/simona_azul</color>
+    <color name="simona_green">@color/simona_verde_claro</color>
+    <color name="simona_dark_gray">@color/simona_tinta</color>
+    <color name="simona_light_gray">@color/simona_linea</color>
+    <color name="simona_white">@color/simona_blanco</color>
+    <color name="simona_error">@color/simona_rojo</color>
+</resources>

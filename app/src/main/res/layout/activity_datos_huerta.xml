@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Paso 3 del flujo de creación de huerta (sección 14.1 y 14.4). Recibe los
+    rangos confirmados en D.2 (vía extras del Intent) y pide nombre,
+    contraseña de red y, opcionalmente, la posición del marcador en un
+    croquis genérico (14.4, "Ubicá tu huerta en el mapa").
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/simona_superficie"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_header"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/datos_huerta_titulo"
+                android:textAppearance="@style/TextAppearance.Simona.HeaderTitle" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Nombre -->
+            <TextView style="@style/RangoTitulo" android:text="@string/label_nombre_huerta" />
+            <EditText
+                android:id="@+id/etNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:hint="@string/hint_nombre_huerta"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:textColor="@color/simona_dark_gray" />
+            <TextView
+                android:id="@+id/tvErrorNombre"
+                style="@style/RangoAviso"
+                android:text="@string/error_nombre_huerta_vacio"
+                android:visibility="gone" />
+
+            <!-- Red WiFi (SSID fijo, sección 14.4: no editable) -->
+            <TextView style="@style/RangoTitulo" android:text="@string/label_red_wifi" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/ssid_fijo"
+                android:textColor="#6B6B6B"
+                android:textSize="13sp" />
+
+            <TextView style="@style/RangoTitulo" android:text="@string/label_password_red" />
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:hint="@string/hint_password_red"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="@color/simona_dark_gray" />
+            <TextView
+                android:id="@+id/tvErrorPassword"
+                style="@style/RangoAviso"
+                android:text="@string/error_password_corta"
+                android:visibility="gone" />
+
+            <!-- Foto de la huerta (opcional) — Fase 6.4: si se elige, se
+                 usa en el mapa compartido en vez del rectángulo de color
+                 del bancal. -->
+            <TextView style="@style/RangoTitulo" android:text="@string/label_foto_huerta" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <FrameLayout
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:background="@drawable/bg_bancal">
+
+                    <ImageView
+                        android:id="@+id/ivFotoPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        android:contentDescription="@string/label_foto_huerta" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvFotoHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hint_foto_huerta"
+                        android:textColor="#6B6B6B"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnElegirFoto"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:minWidth="0dp"
+                        android:text="@string/btn_elegir_foto"
+                        android:textColor="@color/simona_blue" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnQuitarFoto"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:minWidth="0dp"
+                        android:text="@string/btn_quitar_foto"
+                        android:textColor="@color/simona_rojo"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Ubicación opcional en croquis genérico -->
+            <TextView style="@style/RangoTitulo" android:text="@string/label_ubicacion_mapa" />
+            <FrameLayout
+                android:id="@+id/croquis"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/simona_light_gray">
+
+                <TextView
+                    android:id="@+id/tvCroquisHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/hint_croquis"
+                    android:textColor="#6B6B6B"
+                    android:textSize="13sp" />
+
+                <View
+                    android:id="@+id/marcador"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="top|start"
+                    android:background="@drawable/marker_huerta"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGuardar"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="@color/simona_blue"
+                android:text="@string/guardar_y_continuar"
+                android:textAllCaps="false"
+                android:textColor="@color/simona_white"
+                android:textStyle="bold"
+                app:cornerRadius="12dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

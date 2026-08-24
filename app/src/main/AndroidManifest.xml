@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Necesario para que el WebView pueda cargar el dashboard del ESP32 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Necesario para requestNetwork() con WifiNetworkSpecifier -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <!-- Fase 6.5: postear la notificación de alerta en Android 13+ (API 33)
+         exige este permiso en tiempo de ejecución; se pide en
+         MapaHuertasActivity. En versiones anteriores no hace falta pedirlo. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".SimonaApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Simona"
+        android:usesCleartextTraffic="true">
+
+        <!--
+            Nuevo launcher (reemplaza a MainActivity, que manejaba el viejo
+            flujo de una sola huerta con contraseña fija). Se puede borrar
+            MainActivity.kt y activity_main.xml del proyecto: ya no los
+            referencia nada.
+
+            Fase 6.1: tema cambiado a Theme.Simona.Splash (Splash Screen API
+            estándar, ver themes.xml). SplashActivity.kt pasa a ese tema
+            apenas installSplashScreen() retira la pantalla nativa
+            (postSplashScreenTheme = Theme.Simona.NoActionBar, el mismo que
+            tenía antes).
+        -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Simona.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Simona.NoActionBar" />
+
+        <!-- Fase 5.4 — pantalla de detalle offline con el mini-mapa
+             multicapa (MiniMapaCapasView). No usa Theme.Simona.NoActionBar
+             como el dashboard: es 100% nativa, no una pantalla en pantalla
+             completa tipo WebView. -->
+        <activity
+            android:name=".DetalleHuertaActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".SeleccionarPerfilActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".AjustarRangosActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".DatosHuertaActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".TutorialConexionActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".MapaHuertasActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
+
+    </application>
+
+</manifest>

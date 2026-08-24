@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/simona_card_bg"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_ai_chat"
+            app:tint="@color/simona_verde" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:text="@string/asistente_titulo"
+            android:textColor="@color/simona_tinta"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollChat"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/bg_chip_resumen"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvHistorialChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/asistente_bienvenida"
+            android:textColor="@color/simona_tinta"
+            android:textSize="13sp"
+            android:lineSpacingExtra="3dp" />
+
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBarChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:indeterminateTint="@color/simona_verde_claro"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/etPreguntaChat"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_huerta"
+            android:hint="@string/asistente_hint"
+            android:textSize="13sp"
+            android:textColor="@color/simona_tinta"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:inputType="textCapSentences" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEnviarChat"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/simona_verde_claro"
+            android:contentDescription="@string/enviar"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            app:icon="@drawable/ic_enviar"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="18dp"
+            app:iconTint="@color/simona_on_accent"
+            app:cornerRadius="23dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

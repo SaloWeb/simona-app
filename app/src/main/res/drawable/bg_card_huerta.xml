@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Antes: #FFFFFF / #E4DFD6 hardcodeados (no se adaptaban a modo oscuro).
+         Ahora usa los tokens portados en la Fase 5.1, que sí tienen
+         variante -night. Radio unificado a 16dp (simona_radio), calcado de
+         la variable "radio" del HTML (.riego-status) — antes estaba en 14dp. -->
+    <solid android:color="@color/simona_card_bg" />
+    <stroke android:width="1dp" android:color="@color/simona_linea" />
+    <corners android:radius="@dimen/simona_radio" />
+</shape>

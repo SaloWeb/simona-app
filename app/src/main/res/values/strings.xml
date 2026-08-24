@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SIMONA</string>
+
+    <!-- SplashActivity (nueva) -->
+    <string name="splash_subtitulo">Cargando tus huertas…</string>
+
+    <!-- MapaHuertasActivity — home (nuevo estado vacío + acceso a crear huerta) -->
+    <string name="nueva_huerta">Nueva huerta</string>
+    <string name="home_subtitulo">Panel de huertas inteligentes</string>
+    <string name="home_vacio_titulo">Todavía no tenés huertas registradas</string>
+    <string name="home_vacio_texto">Creá la primera para empezar a monitorearla y controlar su riego.</string>
+    <string name="crear_primera_huerta">Crear mi primera huerta</string>
+    <string name="home_tab_lista">Tarjetas</string>
+    <string name="home_tab_mapa">Croquis</string>
+    <string name="home_tus_huertas">Tus huertas</string>
+    <string name="home_mapa_hint">Tocá una huerta para ver su estado y conectarte</string>
+    <string name="home_chip_total">Total</string>
+    <string name="home_chip_con_sed">Con sed</string>
+    <string name="home_chip_optimas">Óptimas</string>
+    <string name="home_sin_lecturas">Sin lecturas recientes — tocá para conectar</string>
+    <string name="home_humedad_estado">Humedad %1$d%% · %2$s · Ver detalle</string>
+    <string name="home_estado_seco">Suelo seco</string>
+    <string name="home_estado_humedo">Suelo húmedo</string>
+    <string name="home_estado_optimo">Nivel óptimo</string>
+    <string name="home_rango_ideal">%1$s · Ideal %2$d%% – %3$d%%</string>
+    <string name="home_contador_una">1 huerta registrada</string>
+    <string name="home_contador_varias">%1$d huertas registradas</string>
+    <string name="asistente_titulo">Asistente Simona</string>
+    <string name="asistente_bienvenida">Hola. Soy Simona, tu asistente agronómica. Preguntame sobre cuidados, humedad, riego o consejos para tus huertas.</string>
+    <string name="asistente_hint">Preguntale algo a Simona…</string>
+    <string name="asistente_tu">Tú</string>
+    <string name="asistente_simona">Simona</string>
+    <string name="asistente_pensando">Simona está pensando…</string>
+    <string name="asistente_error_prefijo">Error</string>
+    <string name="enviar">Enviar</string>
+    <string name="opciones_huerta_cd">Opciones de %1$s</string>
+
+    <string name="status_disconnected_title">No estás conectado a SIMONA</string>
+    <string name="status_disconnected_subtitle">Acercate al dispositivo y tocá Conectar</string>
+    <string name="btn_connect">Conectar a SIMONA</string>
+    <string name="btn_retry">Reintentar</string>
+
+    <string name="status_connecting">Conectando con SIMONA…</string>
+
+    <!-- Mensajes de error (sección 5.4 del Plan de Desarrollo) -->
+    <string name="error_timeout">No se encontró la red SIMONA. Acercate al dispositivo y volvé a intentar.</string>
+    <string name="error_connection_lost">Se perdió la conexión con SIMONA.</string>
+    <string name="error_device_not_responding">Conectado a SIMONA, esperando al dispositivo…</string>
+
+    <!--
+        Fase 2.1 — Modo demo vs. modo hardware real.
+
+        resolverUrlBase() (DashboardActivity.kt y TutorialConexionActivity.kt)
+        toma de acá el ESQUEMA y el PUERTO, y reemplaza el HOST en tiempo de
+        ejecución por el gateway real de la red conectada — así que para
+        cambiar de entorno alcanza con editar esta constante, sin tocar
+        código. Ver README, sección "Modo demo vs. modo hardware real".
+
+        Dejar UNA sola línea activa (sin comentar) antes de compilar:
+
+        - DEMO (servidor_simulado.py, puerto explícito :8000):
+    -->
+    <string name="dashboard_url">http://10.42.0.1:8000</string>
+    <!--
+        - HARDWARE REAL (ESP32, puerto 80 implícito — sin ":puerto"):
+          <string name="dashboard_url">http://192.168.4.1</string>
+    -->
+
+    <!-- D.1 — SeleccionarPerfilActivity (sección 14.2) -->
+    <string name="seleccionar_perfil_titulo">Elegí un perfil de cultivo</string>
+    <string name="seleccionar_perfil_subtitulo">Podés ajustar los valores en el paso siguiente</string>
+
+    <!-- D.2 — AjustarRangosActivity (sección 14.3) -->
+    <string name="ajustar_rangos_titulo">Ajustá los rangos</string>
+    <string name="usar_valores_recomendados">Usar valores recomendados</string>
+    <string name="ajustar_manualmente">Ajustar manualmente</string>
+    <string name="continuar">Continuar</string>
+    <string name="rango_humedad">Humedad del suelo</string>
+    <string name="rango_ph">pH del suelo</string>
+    <string name="rango_luz">Luminosidad</string>
+    <string name="rango_temp">Temperatura</string>
+    <string name="aviso_ancho_minimo_humedad">El rango de humedad debe tener al menos 10 puntos de diferencia entre el mínimo y el máximo.</string>
+
+    <!-- D.3 — DatosHuertaActivity (sección 14.4) -->
+    <string name="datos_huerta_titulo">Datos de tu huerta</string>
+    <string name="label_nombre_huerta">Nombre de la huerta</string>
+    <string name="hint_nombre_huerta">Ej: Huerta del fondo</string>
+    <string name="error_nombre_huerta_vacio">Ingresá un nombre para tu huerta</string>
+    <string name="label_red_wifi">Red WiFi</string>
+    <string name="ssid_fijo">SSID: SIMONA</string>
+    <string name="label_password_red">Contraseña de red</string>
+    <string name="hint_password_red">Mínimo 8 caracteres</string>
+    <string name="error_password_corta">La contraseña debe tener al menos 8 caracteres (mínimo WPA2)</string>
+    <string name="label_foto_huerta">Foto de la huerta (opcional)</string>
+    <string name="hint_foto_huerta">Se muestra en el mapa en vez del bancal de color</string>
+    <string name="btn_elegir_foto">Elegir foto</string>
+    <string name="btn_cambiar_foto">Cambiar foto</string>
+    <string name="btn_quitar_foto">Quitar foto</string>
+    <string name="label_ubicacion_mapa">Ubicá tu huerta en el mapa (opcional)</string>
+    <string name="hint_croquis">Tocá para marcar la ubicación</string>
+    <string name="guardar_y_continuar">Guardar y continuar</string>
+    <string name="huerta_guardada">%1$s guardada</string>
+
+    <!-- D.4 — TutorialConexionActivity (sección 14.5) -->
+    <string name="tutorial_subtitulo">Acercate al dispositivo de %1$s y tocá Conectar</string>
+    <!-- Se muestra brevemente entre "conectado al WiFi" y "dashboard abierto",
+         mientras se empuja la config de la huerta al dispositivo (POST /config). -->
+    <string name="tutorial_configurando">Configurando el dispositivo…</string>
+    <!-- Fase 1.2 — se agotaron los reintentos de POST /config; se avisa antes
+         de abrir igual el dashboard, para que el usuario entienda por qué
+         puede estar viendo datos desactualizados. -->
+    <string name="error_sincronizar_config">No se pudo sincronizar la configuración, mostrando datos del dispositivo</string>
+
+    <!-- Fase 6.3 — indicador de señal WiFi (RSSI) en TutorialConexionActivity -->
+    <string name="senal_wifi_descripcion">Fuerza de la señal WiFi</string>
+    <string name="senal_debil">Señal débil</string>
+    <string name="senal_regular">Señal regular</string>
+    <string name="senal_buena">Señal buena</string>
+    <string name="senal_excelente">Señal excelente</string>
+
+    <!-- Fase 6.2 — confirmación al salir del dashboard con atrás/gesto (se
+         desconecta la red de SIMONA al confirmar) -->
+    <string name="dialog_salir_dashboard_titulo">¿Salir del dashboard?</string>
+    <string name="dialog_salir_dashboard_mensaje">Se va a desconectar de la red de SIMONA. Vas a tener que volver a conectarte para seguir monitoreando esta huerta.</string>
+    <string name="btn_salir">Salir</string>
+
+    <!-- Asistente IA "Simona" (chat flotante del dashboard) -->
+    <string name="asistente_sin_internet">No hay conexión a internet en este momento. Conectate a WiFi o datos móviles para usar el asistente.</string>
+    <string name="asistente_sin_api_key">Falta configurar la API key de Gemini en secrets.xml.</string>
+    <string name="asistente_error_generico">No pude conectarme con el asistente. Probá de nuevo en un momento.</string>
+
+    <!-- Opciones, Edición y Eliminación de Huertas -->
+    <string name="opciones_huerta_titulo">Opciones de %1$s</string>
+    <string name="opcion_conectar">Conectar y monitorear</string>
+    <string name="opcion_editar">Editar huerta y rangos</string>
+    <string name="opcion_eliminar">Eliminar huerta</string>
+    <string name="eliminar_huerta_titulo">Eliminar huerta</string>
+    <string name="eliminar_huerta_mensaje">¿Estás seguro de que deseás eliminar \"%1$s\"? Se perderá su configuración y última telemetría.</string>
+    <string name="btn_eliminar">Eliminar</string>
+    <string name="btn_cancelar">Cancelar</string>
+    <string name="btn_guardar_cambios">Guardar cambios</string>
+    <string name="huerta_actualizada">Huerta actualizada</string>
+    <string name="huerta_eliminada">Huerta eliminada</string>
+    <string name="editar_huerta_titulo">Editar %1$s</string>
+
+    <!-- Fase 6.5: alertas de riego en background -->
+    <string name="notif_canal_nombre">Alertas de riego</string>
+    <string name="notif_canal_descripcion">Avisa cuando una huerta registrada baja de su humedad mínima</string>
+    <string name="notif_titulo_una_huerta">%1$s tiene sed</string>
+    <string name="notif_titulo_varias_huertas">%1$d huertas tienen sed</string>
+</resources>

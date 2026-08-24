@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "mathiasfrohlich.Kotlin",
+        "richardwillis.vscode-gradle",
+        "vscjava.vscode-gradle",
+        "redhat.vscode-xml"
+    ]
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="simona_radio">16dp</dimen>
+    <dimen name="simona_radio_sm">12dp</dimen>
+    <dimen name="simona_radio_xs">8dp</dimen>
+    <dimen name="simona_space">16dp</dimen>
+    <dimen name="simona_space_sm">12dp</dimen>
+    <dimen name="simona_space_xs">8dp</dimen>
+    <dimen name="simona_header_logo">36dp</dimen>
+    <dimen name="simona_perfil_icon">40dp</dimen>
+    <dimen name="simona_card_pad">16dp</dimen>
+</resources>

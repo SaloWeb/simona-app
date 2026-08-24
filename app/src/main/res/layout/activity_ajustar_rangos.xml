@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Paso 2 del flujo de creación de huerta (sección 14.3 del Plan de
+    Desarrollo). Precarga los 4 rangos del perfil elegido en D.1 sobre
+    sliders dobles (min–max). Arranca mostrando solo el resumen + botón
+    "Usar valores recomendados"; el link "Ajustar manualmente" despliega
+    los sliders y los campos de texto para edición fina.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/simona_superficie"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_header"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ajustar_rangos_titulo"
+                android:textAppearance="@style/TextAppearance.Simona.HeaderTitle" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="10dp">
+
+                <FrameLayout
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_icon_circle">
+
+                    <ImageView
+                        android:id="@+id/ivPerfilIcono"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@null"
+                        tools:src="@drawable/ic_perfil_fruto" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvPerfilNombre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/simona_on_header_muted"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Fruto" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Bloque "usar recomendados" vs "ajustar manualmente" -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUsarRecomendados"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:backgroundTint="#8DC035"
+                android:text="@string/usar_valores_recomendados"
+                android:textAllCaps="false"
+                android:textColor="#262626"
+                android:textStyle="bold"
+                app:cornerRadius="12dp" />
+
+            <TextView
+                android:id="@+id/linkAjustarManualmente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="14dp"
+                android:padding="6dp"
+                android:text="@string/ajustar_manualmente"
+                android:textColor="#1A75B3"
+                android:textStyle="bold"
+                android:textSize="13sp" />
+
+            <!-- Grupo de sliders, oculto hasta tocar "Ajustar manualmente" -->
+            <LinearLayout
+                android:id="@+id/grupoManual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:visibility="gone">
+
+                <!-- ===== Humedad del suelo ===== -->
+                <TextView style="@style/RangoTitulo" android:text="@string/rango_humedad" />
+                <TextView
+                    android:id="@+id/tvHumedadAviso"
+                    style="@style/RangoAviso"
+                    android:text="@string/aviso_ancho_minimo_humedad"
+                    android:visibility="gone" />
+                <LinearLayout style="@style/RangoFilaTexto">
+                    <EditText
+                        android:id="@+id/etHumedadMin"
+                        style="@style/RangoEditText"
+                        android:inputType="number" />
+                    <TextView style="@style/RangoGuion" android:text="—" />
+                    <EditText
+                        android:id="@+id/etHumedadMax"
+                        style="@style/RangoEditText"
+                        android:inputType="number" />
+                    <TextView style="@style/RangoUnidad" android:text="%" />
+                </LinearLayout>
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/sliderHumedad"
+                    style="@style/RangoSlider"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    android:stepSize="1" />
+
+                <!-- ===== pH ===== -->
+                <TextView style="@style/RangoTitulo" android:text="@string/rango_ph" />
+                <LinearLayout style="@style/RangoFilaTexto">
+                    <EditText
+                        android:id="@+id/etPhMin"
+                        style="@style/RangoEditText"
+                        android:inputType="numberDecimal" />
+                    <TextView style="@style/RangoGuion" android:text="—" />
+                    <EditText
+                        android:id="@+id/etPhMax"
+                        style="@style/RangoEditText"
+                        android:inputType="numberDecimal" />
+                    <TextView style="@style/RangoUnidad" android:text="" />
+                </LinearLayout>
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/sliderPh"
+                    style="@style/RangoSlider"
+                    android:valueFrom="0"
+                    android:valueTo="14"
+                    android:stepSize="0.1" />
+
+                <!-- ===== Luminosidad ===== -->
+                <TextView style="@style/RangoTitulo" android:text="@string/rango_luz" />
+                <LinearLayout style="@style/RangoFilaTexto">
+                    <EditText
+                        android:id="@+id/etLuzMin"
+                        style="@style/RangoEditText"
+                        android:inputType="number" />
+                    <TextView style="@style/RangoGuion" android:text="—" />
+                    <EditText
+                        android:id="@+id/etLuzMax"
+                        style="@style/RangoEditText"
+                        android:inputType="number" />
+                    <TextView style="@style/RangoUnidad" android:text="lux" />
+                </LinearLayout>
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/sliderLuz"
+                    style="@style/RangoSlider"
+                    android:valueFrom="0"
+                    android:valueTo="1000"
+                    android:stepSize="10" />
+
+                <!-- ===== Temperatura ===== -->
+                <TextView style="@style/RangoTitulo" android:text="@string/rango_temp" />
+                <LinearLayout style="@style/RangoFilaTexto">
+                    <EditText
+                        android:id="@+id/etTempMin"
+                        style="@style/RangoEditText"
+                        android:inputType="numberDecimal|numberSigned" />
+                    <TextView style="@style/RangoGuion" android:text="—" />
+                    <EditText
+                        android:id="@+id/etTempMax"
+                        style="@style/RangoEditText"
+                        android:inputType="numberDecimal|numberSigned" />
+                    <TextView style="@style/RangoUnidad" android:text="°C" />
+                </LinearLayout>
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/sliderTemp"
+                    style="@style/RangoSlider"
+                    android:valueFrom="-10"
+                    android:valueTo="50"
+                    android:stepSize="0.5" />
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnContinuar"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#1A75B3"
+                android:text="@string/continuar"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:cornerRadius="12dp"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

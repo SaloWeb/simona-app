@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Círculo central (Android no soporta <circle>, convertido a pathData) -->
+    <path
+        android:pathData="M7.8,12 a4.2,4.2 0 1,0 8.4,0 a4.2,4.2 0 1,0 -8.4,0"
+        android:strokeColor="@color/simona_tinta"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000" />
+    <!-- Rayos -->
+    <path
+        android:pathData="M12,2.5v2.6M12,18.9v2.6M4.6,4.6l1.8,1.8M17.6,17.6l1.8,1.8M2.5,12h2.6M18.9,12h2.6M4.6,19.4l1.8,-1.8M17.6,6.4l1.8,-1.8"
+        android:strokeColor="@color/simona_tinta"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000" />
+</vector>

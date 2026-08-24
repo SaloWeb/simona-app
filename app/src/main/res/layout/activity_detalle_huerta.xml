@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/simona_blanco"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Encabezado: volver + nombre/categoría de la huerta -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:id="@+id/btnVolver"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/ic_volver"
+                android:contentDescription="Volver"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                app:tint="@color/simona_tinta" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtNombreHuerta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/simona_tinta"
+                    tools:text="Huerta del fondo" />
+
+                <TextView
+                    android:id="@+id/txtCategoriaHuerta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/simona_tinta_suave"
+                    android:paddingTop="2dp"
+                    tools:text="Hoja" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Estado vacío: todavía no llegó ninguna lectura de esta huerta -->
+        <LinearLayout
+            android:id="@+id/estadoSinLecturas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/bg_card_huerta"
+            android:padding="24dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Todavía no hay lecturas de esta huerta."
+                android:textSize="14sp"
+                android:textColor="@color/simona_tinta"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Conectate al dispositivo desde el dashboard en vivo para empezar a registrar datos."
+                android:textSize="12sp"
+                android:textColor="@color/simona_tinta_suave"
+                android:gravity="center" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnIrADashboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Ir al dashboard en vivo"
+                app:backgroundTint="@color/simona_azul"
+                android:textColor="@color/simona_on_color" />
+
+        </LinearLayout>
+
+        <!-- Contenido: mini-mapa multicapa + depósito de agua + última actualización -->
+        <LinearLayout
+            android:id="@+id/contenidoConLecturas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_huerta"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mapa de métricas"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/simona_tinta_suave"
+                    android:paddingBottom="12dp" />
+
+                <com.simona.app.MiniMapaCapasView
+                    android:id="@+id/miniMapaCapas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_card_huerta"
+                android:padding="16dp"
+                android:layout_marginTop="12dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_tanque" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Depósito de agua"
+                        android:textSize="12sp"
+                        android:textColor="@color/simona_tinta_suave" />
+
+                    <TextView
+                        android:id="@+id/txtTanqueAgua"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/simona_tinta"
+                        tools:text="85%" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtRiegoActivo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="Riego apagado" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtUltimaActualizacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textColor="@color/simona_tinta_suave"
+                android:gravity="center"
+                android:paddingTop="12dp"
+                tools:text="Última lectura: hace 8s" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

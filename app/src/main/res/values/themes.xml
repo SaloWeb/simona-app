@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Simona" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/simona_azul</item>
+        <item name="colorPrimaryVariant">@color/simona_azul_oscuro</item>
+        <item name="colorOnPrimary">@color/simona_on_color</item>
+        <item name="colorSecondary">@color/simona_verde_claro</item>
+        <item name="colorOnSecondary">@color/simona_on_accent</item>
+        <item name="android:statusBarColor">@color/simona_azul_header</item>
+        <item name="android:navigationBarColor">@color/simona_blanco</item>
+        <item name="android:windowBackground">@color/simona_superficie</item>
+        <item name="materialButtonStyle">@style/Widget.Simona.Button</item>
+    </style>
+
+    <style name="Widget.Simona.Button" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="Widget.Simona.Button.Primary" parent="Widget.Simona.Button">
+        <item name="backgroundTint">@color/simona_azul</item>
+        <item name="android:textColor">@color/simona_on_color</item>
+    </style>
+
+    <style name="Widget.Simona.Button.Accent" parent="Widget.Simona.Button">
+        <item name="backgroundTint">@color/simona_verde_claro</item>
+        <item name="android:textColor">@color/simona_on_accent</item>
+    </style>
+
+    <style name="Widget.Simona.Button.Header" parent="Widget.Simona.Button">
+        <item name="backgroundTint">@color/simona_verde_logo</item>
+        <item name="android:textColor">@color/simona_on_accent</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="cornerRadius">10dp</item>
+    </style>
+
+    <style name="TextAppearance.Simona" parent="TextAppearance.MaterialComponents.Body1" />
+
+    <style name="TextAppearance.Simona.HeaderTitle" parent="TextAppearance.Simona">
+        <item name="android:textColor">@color/simona_on_color</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="TextAppearance.Simona.HeaderSubtitle" parent="TextAppearance.Simona">
+        <item name="android:textColor">@color/simona_on_header_muted</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="Theme.Simona.NoActionBar" parent="Theme.Simona">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Fase 6.1: tema de la Splash Screen API estándar (androidx.core:core-splashscreen).
+         Reemplaza a activity_splash.xml + el Handler con delay manual de
+         SplashActivity.kt. Solo soporta ícono + fondo (sin texto libre:
+         limitación de la API, no nuestra — decisión tomada de ir con splash
+         100% nativo, sin título/subtítulo).
+         postSplashScreenTheme define a qué tema pasa la Activity apenas el
+         sistema retira la splash: el mismo NoActionBar que ya usaba
+         SplashActivity antes de este cambio. -->
+    <style name="Theme.Simona.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/simona_splash_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_simona</item>
+        <item name="postSplashScreenTheme">@style/Theme.Simona.NoActionBar</item>
+    </style>
+
+    <!-- Estilos de AjustarRangosActivity (D.2, sección 14.3) -->
+
+    <style name="RangoTitulo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:textColor">@color/simona_dark_gray</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="RangoAviso">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:textColor">@color/simona_error</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="RangoFilaTexto">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="RangoEditText">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/simona_dark_gray</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
+    <style name="RangoGuion">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:textColor">@color/simona_light_gray</item>
+    </style>
+
+    <style name="RangoUnidad">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">6dp</item>
+        <item name="android:textColor">@color/simona_tinta_suave</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="RangoSlider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="trackColorActive">@color/simona_azul</item>
+        <item name="trackColorInactive">@color/simona_light_gray</item>
+        <item name="thumbColor">@color/simona_azul</item>
+        <item name="haloColor">@color/simona_azul</item>
+    </style>
+
+</resources>

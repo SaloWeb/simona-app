@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/simona_card_bg"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_editar"
+            android:contentDescription="@null"
+            app:tint="@color/simona_azul" />
+
+        <TextView
+            android:id="@+id/tvEditarTitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:text="Editar Huerta"
+            android:textColor="@color/simona_tinta"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingEnd="4dp">
+
+            <!-- Nombre de la huerta -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_nombre_huerta"
+                android:textColor="@color/simona_dark_gray"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etEditarNombre"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_card_huerta"
+                android:hint="@string/hint_nombre_huerta"
+                android:inputType="textCapWords"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/simona_dark_gray"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvErrorEditarNombre"
+                style="@style/RangoAviso"
+                android:text="@string/error_nombre_huerta_vacio"
+                android:visibility="gone" />
+
+            <!-- Contraseña de red WiFi -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/label_password_red"
+                android:textColor="@color/simona_dark_gray"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etEditarPassword"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_card_huerta"
+                android:hint="@string/hint_password_red"
+                android:inputType="textVisiblePassword"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/simona_dark_gray"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvErrorEditarPassword"
+                style="@style/RangoAviso"
+                android:text="@string/error_password_corta"
+                android:visibility="gone" />
+
+            <!-- Foto de la huerta (opcional) — Fase 6.4: si se elige, se
+                 usa en el mapa compartido en vez del rectángulo de color
+                 del bancal. -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/label_foto_huerta"
+                android:textColor="@color/simona_dark_gray"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <FrameLayout
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_bancal">
+
+                    <ImageView
+                        android:id="@+id/ivEditarFotoPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        android:contentDescription="@string/label_foto_huerta" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEditarElegirFoto"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:minWidth="0dp"
+                        android:text="@string/btn_elegir_foto"
+                        android:textColor="@color/simona_blue" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEditarQuitarFoto"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:minWidth="0dp"
+                        android:text="@string/btn_quitar_foto"
+                        android:textColor="@color/simona_rojo"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/simona_light_gray" />
+
+            <!-- Rango Humedad -->
+            <TextView style="@style/RangoTitulo" android:text="@string/rango_humedad" />
+            <TextView
+                android:id="@+id/tvEditarHumedadAviso"
+                style="@style/RangoAviso"
+                android:text="@string/aviso_ancho_minimo_humedad"
+                android:visibility="gone" />
+            <LinearLayout style="@style/RangoFilaTexto">
+                <EditText
+                    android:id="@+id/etEditarHumedadMin"
+                    style="@style/RangoEditText"
+                    android:inputType="number" />
+                <TextView style="@style/RangoGuion" android:text="—" />
+                <EditText
+                    android:id="@+id/etEditarHumedadMax"
+                    style="@style/RangoEditText"
+                    android:inputType="number" />
+                <TextView style="@style/RangoUnidad" android:text="%" />
+            </LinearLayout>
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/sliderEditarHumedad"
+                style="@style/RangoSlider"
+                android:valueFrom="0"
+                android:valueTo="100"
+                android:stepSize="1" />
+
+            <!-- Rango pH -->
+            <TextView style="@style/RangoTitulo" android:text="@string/rango_ph" />
+            <LinearLayout style="@style/RangoFilaTexto">
+                <EditText
+                    android:id="@+id/etEditarPhMin"
+                    style="@style/RangoEditText"
+                    android:inputType="numberDecimal" />
+                <TextView style="@style/RangoGuion" android:text="—" />
+                <EditText
+                    android:id="@+id/etEditarPhMax"
+                    style="@style/RangoEditText"
+                    android:inputType="numberDecimal" />
+                <TextView style="@style/RangoUnidad" android:text="" />
+            </LinearLayout>
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/sliderEditarPh"
+                style="@style/RangoSlider"
+                android:valueFrom="0"
+                android:valueTo="14"
+                android:stepSize="0.1" />
+
+            <!-- Rango Luz -->
+            <TextView style="@style/RangoTitulo" android:text="@string/rango_luz" />
+            <LinearLayout style="@style/RangoFilaTexto">
+                <EditText
+                    android:id="@+id/etEditarLuzMin"
+                    style="@style/RangoEditText"
+                    android:inputType="number" />
+                <TextView style="@style/RangoGuion" android:text="—" />
+                <EditText
+                    android:id="@+id/etEditarLuzMax"
+                    style="@style/RangoEditText"
+                    android:inputType="number" />
+                <TextView style="@style/RangoUnidad" android:text="lux" />
+            </LinearLayout>
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/sliderEditarLuz"
+                style="@style/RangoSlider"
+                android:valueFrom="0"
+                android:valueTo="1000"
+                android:stepSize="10" />
+
+            <!-- Rango Temperatura -->
+            <TextView style="@style/RangoTitulo" android:text="@string/rango_temp" />
+            <LinearLayout style="@style/RangoFilaTexto">
+                <EditText
+                    android:id="@+id/etEditarTempMin"
+                    style="@style/RangoEditText"
+                    android:inputType="numberDecimal|numberSigned" />
+                <TextView style="@style/RangoGuion" android:text="—" />
+                <EditText
+                    android:id="@+id/etEditarTempMax"
+                    style="@style/RangoEditText"
+                    android:inputType="numberDecimal|numberSigned" />
+                <TextView style="@style/RangoUnidad" android:text="°C" />
+            </LinearLayout>
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/sliderEditarTemp"
+                style="@style/RangoSlider"
+                android:valueFrom="-10"
+                android:valueTo="50"
+                android:stepSize="0.5" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Botones de Acción -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditarCancelar"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/btn_cancelar"
+            android:textColor="@color/simona_dark_gray" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditarGuardar"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/simona_blue"
+            android:text="@string/btn_guardar_cambios"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="8dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

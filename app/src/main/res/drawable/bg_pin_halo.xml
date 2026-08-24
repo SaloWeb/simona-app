@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sin stroke, a diferencia de bg_pin_seco/optimo/humedo: al ser un solo
+     color de relleno, sí se puede tintar dinámicamente con
+     backgroundTintList sin perder ningún detalle (a diferencia del pin, que
+     tiene un borde blanco que un tint global taparía). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/simona_tinta" />
+</shape>

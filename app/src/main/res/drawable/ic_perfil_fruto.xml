@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="@color/simona_rojo"
+        android:pathData="M12,8c-3.5,0 -6,2.7 -6,6s2.7,6 6,6 6,-2.7 6,-6 -2.5,-6 -6,-6z" />
+    <path android:fillColor="@color/simona_verde"
+        android:pathData="M12,8c0,-2.5 1.5,-4.5 3.5,-5.2 -0.2,2.2 -1.5,3.8 -3.5,5.2z" />
+    <path android:fillColor="@color/simona_on_color"
+        android:pathData="M10.8,12.2m-0.9,0a0.9,0.9 0,1 1,1.8 0a0.9,0.9 0,1 1,-1.8 0" />
+    <path android:fillColor="@color/simona_on_color"
+        android:pathData="M13.5,14.5m-0.7,0a0.7,0.7 0,1 1,1.4 0a0.7,0.7 0,1 1,-1.4 0" />
+</vector>

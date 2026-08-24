@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- =====================================================================
+         Overrides de modo oscuro — calcados 1:1 del bloque
+         [data-theme="dark"] de DASHBOARD_HTML. Solo se listan los tokens que
+         el HTML efectivamente redefine en oscuro; azul, azul_oscuro,
+         azul_suave, marron, marron_oscuro, rojo y los estados de humedad se
+         mantienen iguales en ambos modos (igual que en el simulador).
+         ===================================================================== -->
+
+    <color name="simona_verde">#82B23E</color>
+    <color name="simona_verde_suave">#263118</color>
+    <color name="simona_marron_suave">#2E2115</color>
+
+    <color name="simona_tinta">#EDE9E1</color>
+    <color name="simona_tinta_suave">#A39C8E</color>
+    <color name="simona_linea">#35301F</color>
+    <color name="simona_blanco">#17150F</color>
+    <color name="simona_card_bg">#211E17</color>
+    <color name="simona_superficie">#1C1913</color>
+    <color name="simona_rojo_suave">#3A1F1F</color>
+    <color name="simona_azul_suave">#1A2E3A</color>
+
+    <color name="simona_toast_bg">#211E17</color>
+    <color name="simona_toast_text">#EDE9E1</color>
+    <color name="simona_toast_border">#35301F</color>
+
+    <color name="simona_spark_color">#4E9FD6</color>
+</resources>
