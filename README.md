@@ -198,43 +198,6 @@ ESP32/huerta, sin dependencias externas):
 python3 simulador/servidor_simulado.py 8000
 ```
 
-## Seguridad — API key de Gemini expuesta
-
-⚠️ **Acción urgente:** `app/src/main/res/values/secrets.xml` tiene
-actualmente una API key de Gemini **real y funcional** pegada en el
-archivo, y `.gitignore` **no** excluye ese archivo — así que si hacés
-`git add .`/`git commit`, esa key queda committeada y visible para
-cualquiera con acceso al repo (o lo hace público si el repo lo es).
-
-Pasos recomendados, en este orden:
-
-1. **Rotar la key ya mismo** en [Google AI Studio](https://aistudio.google.com)
-   (Get API key → revocar/regenerar) — tratala como comprometida.
-2. Agregar esta línea a `.gitignore`:
-   ```
-   app/src/main/res/values/secrets.xml
-   ```
-3. Si ya se llegó a commitear alguna vez, sacarla del historial de git
-   (`git rm --cached app/src/main/res/values/secrets.xml`, y si el repo
-   es compartido, evaluar reescribir el historial — no alcanza con un
-   commit nuevo que la borre).
-4. Recrear `secrets.xml` localmente (no versionado) solo con tu key nueva,
-   y de paso volver a dejar un `secrets.xml.example` con placeholder para
-   que cualquiera pueda clonar el repo y compilar sin la key real.
-
-## Qué falta / próximos pasos sugeridos
-
-- [ ] Rotar la API key de Gemini expuesta y corregir `.gitignore` (ver
-      sección de Seguridad arriba — es lo más urgente).
-- [ ] Recrear `secrets.xml.example` con placeholder.
-- [ ] Reemplazar el ícono placeholder por el logo definitivo de SIMONA.
-- [ ] Probar el flujo completo en rango real del ESP32: conexión, pérdida
-      de conexión, contraseña incorrecta, cierre de la app sin dejar
-      resabios de red.
-- [ ] Generar el APK firmado (release) para distribución.
-- [ ] Evaluar `EncryptedSharedPreferences` para `passwordRed` (pospuesto a
-      propósito por ahora: agrega una dependencia externa nueva y el
-      riesgo actual está acotado a acceso físico/root al dispositivo).
 
 ## Decisiones de diseño no triviales
 
