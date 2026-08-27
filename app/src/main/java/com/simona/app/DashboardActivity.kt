@@ -113,6 +113,12 @@ class DashboardActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
                 binding.waitingOverlay.visibility = View.GONE
                 reintentosPendientes = 3
+
+                // Sincroniza el tema del dashboard con el de la app nativa
+                // (bug UI/UX #4): sin esto, el WebView siempre arranca en
+                // claro sin importar lo que tenga elegido ThemePrefs.
+                val temaInicial = if (ThemePrefs.isDark(this@DashboardActivity)) "dark" else "light"
+                view?.evaluateJavascript("setTemaInicial('$temaInicial')", null)
             }
 
             override fun onReceivedError(
@@ -259,6 +265,23 @@ class DashboardActivity : AppCompatActivity() {
      * móviles), no la red de SIMONA a la que está atado el WebView.
      */
     private inner class PuenteAsistente {
+        /**
+         * Llamado desde toggleTheme() en el HTML del dashboard cuando el
+         * usuario cambia el tema ahí adentro (bug UI/UX #4). Guarda la
+         * preferencia en ThemePrefs para que quede sincronizada con el
+         * toggle nativo del home.
+         */
+        @JavascriptInterface
+        fun temaCambiado(tema: String) {
+            // Los métodos @JavascriptInterface corren en un hilo de
+            // background; ThemePrefs.setDark() termina llamando a
+            // AppCompatDelegate.setDefaultNightMode(), que debe hacerse en
+            // el hilo principal.
+            runOnUiThread {
+                ThemePrefs.setDark(this@DashboardActivity, tema == "dark")
+            }
+        }
+
         @JavascriptInterface
         fun preguntar(pregunta: String) {
             val id = huertaId

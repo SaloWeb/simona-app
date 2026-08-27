@@ -10,6 +10,22 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+    <FrameLayout
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bg_icon_circle"
+        android:backgroundTint="@color/simona_azul_suave">
+
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/senal_wifi_descripcion"
+            android:src="@drawable/ic_wifi_signal"
+            app:tint="@color/simona_azul" />
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

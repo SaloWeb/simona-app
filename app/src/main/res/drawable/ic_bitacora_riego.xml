@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Regadera manual con aspersión -->
+    <path
+        android:pathData="M6,11 H13 L12.5,19 H6.5 Z"
+        android:strokeWidth="1.8"
+        android:strokeColor="@color/simona_azul"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M6,13 H3 C2.4,13 2,13.4 2,14 V17 C2,17.6 2.4,18 3,18 H6.5"
+        android:strokeWidth="1.6"
+        android:strokeColor="@color/simona_azul" />
+    <path
+        android:pathData="M12.5,13 L17,8"
+        android:strokeWidth="2"
+        android:strokeColor="@color/simona_azul"
+        android:strokeLineCap="round" />
+    <!-- Cabezal de aspersión y gotitas -->
+    <path
+        android:pathData="M16,6.5 L18.5,9.5"
+        android:strokeWidth="2"
+        android:strokeColor="@color/simona_azul"
+        android:strokeLineCap="round" />
+    <path
+        android:fillColor="@color/simona_azul"
+        android:pathData="M19,6 m-0.8,0 a0.8,0.8 0 1,0 1.6,0 a0.8,0.8 0 1,0 -1.6,0" />
+    <path
+        android:fillColor="@color/simona_azul"
+        android:pathData="M21.5,9 m-0.8,0 a0.8,0.8 0 1,0 1.6,0 a0.8,0.8 0 1,0 -1.6,0" />
+    <path
+        android:fillColor="@color/simona_azul"
+        android:pathData="M20,12 m-0.8,0 a0.8,0.8 0 1,0 1.6,0 a0.8,0.8 0 1,0 -1.6,0" />
+</vector>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Cesto / canasta de cosecha con frutas -->
+    <path
+        android:pathData="M6,10 L7.5,19 C7.7,20.2 8.7,21 9.9,21 H14.1 C15.3,21 16.3,20.2 16.5,19 L18,10 Z"
+        android:strokeWidth="1.8"
+        android:strokeColor="@color/simona_marron"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M4,10 H20"
+        android:strokeWidth="2"
+        android:strokeColor="@color/simona_marron"
+        android:strokeLineCap="round" />
+    <!-- Asa superior -->
+    <path
+        android:pathData="M8,10 C8,6 10,4 12,4 C14,4 16,6 16,10"
+        android:strokeWidth="1.6"
+        android:strokeColor="@color/simona_marron"
+        android:strokeLineCap="round" />
+    <!-- Frutas / hortalizas cosechadas -->
+    <path
+        android:fillColor="@color/simona_rojo"
+        android:pathData="M10,9.5 m-2.2,0 a2.2,2.2 0 1,0 4.4,0 a2.2,2.2 0 1,0 -4.4,0" />
+    <path
+        android:fillColor="@color/simona_verde_claro"
+        android:pathData="M14,9.5 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+</vector>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Abono orgánico / pala con hoja fertilizante -->
+    <path
+        android:pathData="M16,3 L21,8 M19.5,4.5 L12,12"
+        android:strokeWidth="2"
+        android:strokeColor="@color/simona_marron"
+        android:strokeLineCap="round" />
+    <path
+        android:fillColor="@color/simona_marron"
+        android:pathData="M12,12 C10,10 6,10.5 4,13.5 C3,15 3.5,17 5,18.5 C6.5,20 8.5,20.5 10,19.5 C13,17.5 13.5,13.5 12,12 Z" />
+    <path
+        android:fillColor="@color/simona_verde_claro"
+        android:pathData="M7,13 C6,13 5,14 5,15 C6,15 7,14 7,13 Z" />
+</vector>

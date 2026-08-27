@@ -34,6 +34,13 @@ class SimonaApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Bug UI/UX #3: si no se llama acá, Android decide el tema por su
+        // cuenta (MODE_NIGHT_FOLLOW_SYSTEM) hasta que el usuario toque el
+        // botón de tema al menos una vez en esa sesión, generando
+        // inconsistencias (p. ej. diálogos nativos con la superficie
+        // oscura de Material 3 mientras el resto de la app se ve clara).
+        ThemePrefs.applyTheme(this)
+
         // Cambio (sección 14, múltiples huertas): ya no se fija una única
         // contraseña acá — cada huerta guarda la suya (ver Huerta.kt) y se
         // pasa a connect() en el momento de conectarse (ver 14.5).

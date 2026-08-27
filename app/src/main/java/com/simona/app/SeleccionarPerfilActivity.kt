@@ -29,6 +29,8 @@ class SeleccionarPerfilActivity : AppCompatActivity() {
         binding = ActivitySeleccionarPerfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.btnVolver.setOnClickListener { finish() }
+
         binding.rvPerfiles.layoutManager = GridLayoutManager(this, 2)
         binding.rvPerfiles.adapter = PerfilCultivoAdapter(PerfilesCultivo.lista) { perfil ->
             seleccionarPerfil(perfil)

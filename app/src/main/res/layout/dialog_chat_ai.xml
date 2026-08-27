@@ -16,16 +16,13 @@
 
         <FrameLayout
             android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_icon_circle"
-            android:backgroundTint="@color/simona_verde_suave">
+            android:layout_height="40dp">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_ai_chat"
-                app:tint="@color/simona_verde" />
+                android:src="@drawable/ic_asistente_simona" />
         </FrameLayout>
 
         <TextView

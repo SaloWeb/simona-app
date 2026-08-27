@@ -68,6 +68,7 @@ class DetalleHuertaActivity : AppCompatActivity() {
         binding.contenidoConLecturas.visibility = View.VISIBLE
 
         binding.miniMapaCapas.setCapas(construirCapasDesdeHuerta(huerta, lectura))
+        binding.gaugeHumedad.setValor(lectura.humedad, huerta.humedadMin, huerta.humedadMax)
 
         binding.txtTanqueAgua.text = "${lectura.tanqueAgua.roundToInt()}%"
 

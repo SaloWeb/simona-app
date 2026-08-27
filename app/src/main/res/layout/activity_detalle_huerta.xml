@@ -125,6 +125,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_chip_resumen"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.simona.app.GaugeHumedadView
+                        android:id="@+id/gaugeHumedad"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_chip_resumen"
                     android:orientation="vertical"
                     android:padding="16dp">
 

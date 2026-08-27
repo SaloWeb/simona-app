@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Transición global entre Activities (pulido UI/UX): sin esto, todas
+         las pantallas saltaban en seco de una a otra. Se aplica sola vía
+         windowAnimationStyle en Theme.Simona, sin tocar cada startActivity()
+         ni finish() del proyecto. -->
+    <style name="Simona.WindowAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+    </style>
+
     <style name="Theme.Simona" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/Simona.WindowAnimation</item>
         <item name="colorPrimary">@color/simona_azul</item>
         <item name="colorPrimaryContainer">@color/simona_azul_suave</item>
         <item name="colorOnPrimary">@color/simona_on_color</item>
@@ -49,6 +61,13 @@
         <item name="android:textColor">@color/simona_on_accent</item>
     </style>
 
+    <style name="Widget.Simona.Button.Secondary" parent="Widget.Simona.Button">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="strokeColor">@color/simona_linea</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textColor">@color/simona_tinta_suave</item>
+    </style>
+
     <style name="Widget.Simona.Button.Header" parent="Widget.Simona.Button">
         <item name="backgroundTint">@color/simona_verde_logo</item>
         <item name="android:textColor">@color/simona_on_accent</item>
@@ -86,7 +105,7 @@
          SplashActivity antes de este cambio. -->
     <style name="Theme.Simona.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@drawable/bg_splash_screen</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_simona</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
         <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
         <item name="postSplashScreenTheme">@style/Theme.Simona.NoActionBar</item>
     </style>

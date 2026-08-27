@@ -46,3 +46,13 @@ data class LecturaHuerta(
     val riegoActivo: Boolean,
     val tanqueAgua: Float
 )
+
+/**
+ * Un punto de la serie histórica de una huerta, usado por GraficoTendenciaView
+ * para trazar la curva de humedad/temperatura a lo largo del tiempo.
+ */
+data class PuntoHistorial(
+    val timestamp: Long,
+    val humedad: Float,
+    val temperatura: Float
+)

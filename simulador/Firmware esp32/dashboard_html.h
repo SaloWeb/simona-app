@@ -24,6 +24,7 @@ const char DASHBOARD_HTML[] PROGMEM = R"rawliteral(
        colores primarios (tierra, agua, cultivo) — sin ámbar ni colores
        "genéricos" de plantilla salvo el rojo reservado a alertas críticas. */
     --azul: #1A6FA8; --azul-oscuro: #0F4C73; --azul-suave: #E7F1F8;
+    --azul-header: #12688F; --azul-header-oscuro: #0B4A63;
     --verde: #3F6B17; --verde-claro: #6FA330; --verde-suave: #EEF4E4;
     --marron: #8A5A34; --marron-oscuro: #6B4527; --marron-suave: #F5EDE4;
     --rojo: #C23B3B; --tinta: #24211D; --tinta-suave: #6E685F;
@@ -36,6 +37,7 @@ const char DASHBOARD_HTML[] PROGMEM = R"rawliteral(
     --linea: #35301F; --verde: #82B23E; --verde-suave: #263118;
     --marron-suave: #2E2115; --toast-bg: #211E17; --toast-text: #EDE9E1;
     --toast-border: #35301F; --toast-shadow: 0 8px 24px rgba(0,0,0,0.5); --spark-color: #4E9FD6;
+    --azul-header-oscuro: #1A7AA3;
   }
   * { box-sizing: border-box; }
   svg.icono { width: 1em; height: 1em; flex-shrink: 0; }
@@ -55,7 +57,7 @@ const char DASHBOARD_HTML[] PROGMEM = R"rawliteral(
   .num { font-family: "Roboto Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
 
   header {
-    background: linear-gradient(135deg, var(--azul), var(--azul-oscuro));
+    background: linear-gradient(135deg, var(--azul-header), var(--azul-header-oscuro));
     padding: 18px 20px 14px; padding-top: max(18px, env(safe-area-inset-top));
     color: #FFFFFF; display: flex; align-items: center; gap: 10px;
   }

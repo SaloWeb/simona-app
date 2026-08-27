@@ -51,6 +51,7 @@ class AjustarRangosActivity : AppCompatActivity() {
         val perfilId = intent.getStringExtra(EXTRA_PERFIL_ID)
         perfil = PerfilesCultivo.porId(perfilId ?: "") ?: PerfilesCultivo.porId("personalizado")!!
 
+        binding.btnVolver.setOnClickListener { finish() }
         binding.ivPerfilIcono.setImageResource(perfil.iconoRes)
         binding.tvPerfilNombre.text = perfil.nombre
 

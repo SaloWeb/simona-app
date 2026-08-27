@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Tijeras de poda / hoja de corte -->
+    <path
+        android:pathData="M6,18 C7.5,18 8.5,16.5 8.5,15 C8.5,13.5 7.5,12 6,12 C4.5,12 3.5,13.5 3.5,15 C3.5,16.5 4.5,18 6,18 Z"
+        android:strokeWidth="1.6"
+        android:strokeColor="@color/simona_verde" />
+    <path
+        android:pathData="M18,18 C19.5,18 20.5,16.5 20.5,15 C20.5,13.5 19.5,12 18,12 C16.5,12 15.5,13.5 15.5,15 C15.5,16.5 16.5,18 18,18 Z"
+        android:strokeWidth="1.6"
+        android:strokeColor="@color/simona_verde" />
+    <path
+        android:pathData="M7.8,13.5 L15,4 M16.2,13.5 L9,4"
+        android:strokeWidth="1.8"
+        android:strokeColor="@color/simona_verde"
+        android:strokeLineCap="round" />
+    <!-- Eje central -->
+    <path
+        android:fillColor="@color/simona_marron"
+        android:pathData="M12,8.5 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0" />
+</vector>

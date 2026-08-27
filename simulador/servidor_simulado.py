@@ -215,6 +215,7 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
        colores primarios (tierra, agua, cultivo) — sin ámbar ni colores
        "genéricos" de plantilla salvo el rojo reservado a alertas críticas. */
     --azul: #1A6FA8; --azul-oscuro: #0F4C73; --azul-suave: #E7F1F8;
+    --azul-header: #12688F; --azul-header-oscuro: #0B4A63;
     --verde: #3F6B17; --verde-claro: #6FA330; --verde-suave: #EEF4E4;
     --marron: #8A5A34; --marron-oscuro: #6B4527; --marron-suave: #F5EDE4;
     --rojo: #C23B3B; --tinta: #24211D; --tinta-suave: #6E685F;
@@ -227,6 +228,7 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
     --linea: #35301F; --verde: #82B23E; --verde-suave: #263118;
     --marron-suave: #2E2115; --toast-bg: #211E17; --toast-text: #EDE9E1;
     --toast-border: #35301F; --toast-shadow: 0 8px 24px rgba(0,0,0,0.5); --spark-color: #4E9FD6;
+    --azul-header-oscuro: #1A7AA3;
   }
   * { box-sizing: border-box; }
   svg.icono { width: 1em; height: 1em; flex-shrink: 0; }
@@ -235,7 +237,6 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
   .ic svg { width: 16px; height: 16px; }
   .metrica-header .ic { color: var(--azul); }
   #btnTema svg { width: 16px; height: 16px; }
-  .badge-demo .ic svg { width: 13px; height: 13px; color: var(--marron); }
   .btn-refill .ic svg { width: 11px; height: 11px; }
 
   html, body {
@@ -246,7 +247,7 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
   .num { font-family: "Roboto Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
 
   header {
-    background: linear-gradient(135deg, var(--azul), var(--azul-oscuro));
+    background: linear-gradient(135deg, var(--azul-header), var(--azul-header-oscuro));
     padding: 18px 20px 14px; padding-top: max(18px, env(safe-area-inset-top));
     color: #FFFFFF; display: flex; align-items: center; gap: 10px;
   }
@@ -270,11 +271,6 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
   .btn:active { transform: scale(0.98); }
 
   /* ---- Dashboard (gauge) ---- */
-  .badge-demo {
-    margin: 12px 0 0; padding: 5px 12px 5px 10px; background: var(--marron-suave); border: 1px solid var(--marron);
-    color: var(--marron-oscuro); border-radius: 999px; font-size: 11px; font-weight: 700;
-    display: inline-flex; align-items: center; gap: 5px;
-  }
   .panel-gauge { padding: 8px 0 4px; text-align: center; }
   .gauge-eyebrow {
     font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
@@ -360,8 +356,6 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
 </header>
 
 <div class="contenido">
-  <span class="badge-demo"><span class="ic" data-icon="alerta"></span> MODO DEMO — datos simulados</span>
-
   <div class="panel-gauge">
     <div class="gauge-eyebrow">Humedad del suelo</div>
     <svg id="gauge" viewBox="0 0 300 240" role="img" aria-label="Gauge de humedad del suelo">
@@ -465,10 +459,27 @@ function actualizarIconoTema() {
   document.getElementById('btnTema').innerHTML = icon(cur === 'dark' ? 'sol' : 'luna');
 }
 
+// Llamada por la app nativa (Android.setTemaInicial(...)) justo después de
+// cargar la página, para que el WebView arranque con el mismo tema que
+// tiene guardado ThemePrefs en la app. No dispara aviso de vuelta a la app
+// porque no es un cambio iniciado por el usuario acá.
+function setTemaInicial(tema) {
+  document.documentElement.setAttribute('data-theme', tema === 'dark' ? 'dark' : 'light');
+  actualizarIconoTema();
+}
+
 function toggleTheme() {
   const cur = document.documentElement.getAttribute('data-theme');
-  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+  const nuevo = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', nuevo);
   actualizarIconoTema();
+  // Avisa a la app nativa para que guarde la preferencia en ThemePrefs
+  // (puente SimonaAndroid, ver DashboardActivity.kt). Si se abre este HTML
+  // fuera del WebView de la app (ej. navegador de escritorio para debug),
+  // SimonaAndroid no existe y se ignora sin romper nada.
+  if (window.SimonaAndroid && window.SimonaAndroid.temaCambiado) {
+    window.SimonaAndroid.temaCambiado(nuevo);
+  }
 }
 
 function showToast(message, type = 'normal', duration = 4000) {

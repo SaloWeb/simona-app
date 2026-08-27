@@ -2,11 +2,13 @@
 package com.simona.app
 
 import android.app.AlertDialog
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.RangeSlider
 
 /**
@@ -44,7 +45,7 @@ class MapaHuertasActivity : AppCompatActivity() {
     private lateinit var tvChipConSed: TextView
     private lateinit var tvChipOptimas: TextView
     private lateinit var tvContadorHuertas: TextView
-    private lateinit var fabAiSimona: FloatingActionButton
+    private lateinit var fabAiSimona: ImageView
 
     private var vistaActual = "lista" // "lista" o "mapa"
 
@@ -142,6 +143,7 @@ class MapaHuertasActivity : AppCompatActivity() {
         seccionLista.visibility = if (esLista) View.VISIBLE else View.GONE
         seccionMapa.visibility = if (esLista) View.GONE else View.VISIBLE
 
+        tabBtnLista.isSelected = esLista
         tabBtnLista.backgroundTintList = ContextCompat.getColorStateList(
             this, if (esLista) R.color.simona_azul_suave else R.color.simona_card_bg
         )
@@ -149,6 +151,7 @@ class MapaHuertasActivity : AppCompatActivity() {
             ContextCompat.getColor(this, if (esLista) R.color.simona_azul else R.color.simona_tinta_suave)
         )
 
+        tabBtnMapa.isSelected = !esLista
         tabBtnMapa.backgroundTintList = ContextCompat.getColorStateList(
             this, if (!esLista) R.color.simona_azul_suave else R.color.simona_card_bg
         )
@@ -183,6 +186,9 @@ class MapaHuertasActivity : AppCompatActivity() {
 
         tvChipTotal.text = total.toString()
         tvChipConSed.text = conSed.toString()
+        tvChipConSed.setTextColor(
+            ContextCompat.getColor(this, if (conSed > 0) R.color.simona_rojo else R.color.simona_tinta_suave)
+        )
         tvChipOptimas.text = optimas.toString()
         tvContadorHuertas.text = if (total == 1) {
             getString(R.string.home_contador_una)
@@ -205,10 +211,22 @@ class MapaHuertasActivity : AppCompatActivity() {
         val colorMarron = ContextCompat.getColor(this, R.color.simona_marron)
 
         huertas.forEach { huerta ->
-            val card = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
+            val l = huerta.ultimaLectura
+            val colorFranja = when {
+                l == null -> colorMarron
+                l.humedad <= huerta.humedadMin -> colorRojo
+                l.humedad >= huerta.humedadMax -> colorAzul
+                else -> colorVerde
+            }
+
+            // El wrapper lleva el fondo/borde de la tarjeta, el click y la
+            // franja de color; `card` (más abajo) solo aporta el padding y
+            // el contenido, para que la franja llegue hasta los bordes.
+            val wrapper = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
                 background = ContextCompat.getDrawable(this@MapaHuertasActivity, R.drawable.bg_card_huerta)
-                setPadding(16.dpToPx(), 14.dpToPx(), 16.dpToPx(), 14.dpToPx())
+                foreground = obtenerRippleTematico()
+                clipToOutline = true
                 val lp = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -222,6 +240,17 @@ class MapaHuertasActivity : AppCompatActivity() {
                     mostrarOpcionesHuerta(huerta)
                     true
                 }
+            }
+
+            wrapper.addView(View(this).apply {
+                layoutParams = LinearLayout.LayoutParams(4.dpToPx(), LinearLayout.LayoutParams.MATCH_PARENT)
+                setBackgroundColor(colorFranja)
+            })
+
+            val card = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(16.dpToPx(), 14.dpToPx(), 16.dpToPx(), 14.dpToPx())
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             }
 
             val filaTop = LinearLayout(this).apply {
@@ -259,6 +288,7 @@ class MapaHuertasActivity : AppCompatActivity() {
                 layoutParams = LinearLayout.LayoutParams(32.dpToPx(), 32.dpToPx())
                 setPadding(4.dpToPx(), 4.dpToPx(), 4.dpToPx(), 4.dpToPx())
                 imageTintList = ContextCompat.getColorStateList(this@MapaHuertasActivity, R.color.simona_tinta_suave)
+                foreground = obtenerRippleTematico()
                 isClickable = true
                 isFocusable = true
                 contentDescription = getString(R.string.opciones_huerta_cd, huerta.nombre)
@@ -273,7 +303,6 @@ class MapaHuertasActivity : AppCompatActivity() {
 
             card.addView(filaTop)
 
-            val l = huerta.ultimaLectura
             val filaEstado = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
@@ -310,6 +339,8 @@ class MapaHuertasActivity : AppCompatActivity() {
                     textSize = 12f
                     setTextColor(colorEstado)
                     setTypeface(null, android.graphics.Typeface.BOLD)
+                    setPadding(2.dpToPx(), 4.dpToPx(), 2.dpToPx(), 4.dpToPx())
+                    foreground = obtenerRippleTematico()
                     isClickable = true
                     isFocusable = true
                     setOnClickListener {
@@ -331,7 +362,8 @@ class MapaHuertasActivity : AppCompatActivity() {
             }
             card.addView(filaEstado)
 
-            listaHeatmapsContainer.addView(card)
+            wrapper.addView(card)
+            listaHeatmapsContainer.addView(wrapper)
         }
     }
 
@@ -749,4 +781,16 @@ class MapaHuertasActivity : AppCompatActivity() {
     }
 
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
+
+    /**
+     * Resuelve ?attr/selectableItemBackground (ripple temático estándar de
+     * Material) para usarlo como foreground de views armadas a mano por
+     * código, como las cards de huerta de renderizarTarjetas(), que no
+     * tenían ningún feedback táctil al tocarlas.
+     */
+    private fun obtenerRippleTematico(): Drawable? {
+        val valor = TypedValue()
+        theme.resolveAttribute(android.R.attr.selectableItemBackground, valor, true)
+        return ContextCompat.getDrawable(this, valor.resourceId)
+    }
 }

@@ -149,4 +149,17 @@
     <string name="notif_canal_descripcion">Avisa cuando una huerta registrada baja de su humedad mínima</string>
     <string name="notif_titulo_una_huerta">%1$s tiene sed</string>
     <string name="notif_titulo_varias_huertas">%1$d huertas tienen sed</string>
+
+    <!-- dialog_diagnostico_wifi: asistente de resolución de problemas de conexión -->
+    <string name="diagnostico_titulo">No se pudo conectar</string>
+    <string name="diagnostico_subtitulo">Revisá estos pasos antes de reintentar la conexión con tu huerta.</string>
+    <string name="diagnostico_paso1_titulo">Verificá la red WiFi</string>
+    <string name="diagnostico_paso1_desc">Confirmá que el nombre (SSID) y la contraseña ingresados sean exactamente los de tu red de 2.4GHz.</string>
+    <string name="diagnostico_paso2_titulo">Acercate al dispositivo</string>
+    <string name="diagnostico_paso2_desc">Si SIMONA está lejos del router, la señal puede ser insuficiente para completar el emparejamiento.</string>
+    <string name="diagnostico_paso3_titulo">Reiniciá el módulo</string>
+    <string name="diagnostico_paso3_desc">Desconectá la alimentación de la huerta por unos segundos y volvé a conectarla.</string>
+    <string name="diagnostico_paso4_titulo">Probá de nuevo</string>
+    <string name="diagnostico_paso4_desc">Con estos pasos hechos, tocá el botón de abajo para reintentar la conexión.</string>
+    <string name="btn_reintentar_conexion">Reintentar conexión</string>
 </resources>

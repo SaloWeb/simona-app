@@ -50,6 +50,7 @@ class DatosHuertaActivity : AppCompatActivity() {
 
         setupCroquis()
         setupFoto()
+        binding.btnVolver.setOnClickListener { finish() }
         binding.btnGuardar.setOnClickListener { guardarHuerta() }
     }
 

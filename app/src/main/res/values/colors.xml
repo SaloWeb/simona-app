@@ -10,8 +10,8 @@
     <color name="simona_azul">#1A6FA8</color>
     <color name="simona_azul_oscuro">#0F4C73</color>
     <color name="simona_azul_suave">#E7F1F8</color>
-    <color name="simona_azul_header">#0B3A5C</color>
-    <color name="simona_azul_header_2">#124E72</color>
+    <color name="simona_azul_header">#12688F</color>
+    <color name="simona_azul_header_2">#0B4A63</color>
 
     <!-- Verde — cultivo -->
     <color name="simona_verde">#3F6B17</color>
@@ -44,8 +44,8 @@
     <color name="simona_on_header_muted">#B8D4E8</color>
 
     <!-- Launcher / splash (fondo del logo) -->
-    <color name="ic_launcher_background">#000000</color>
-    <color name="simona_splash_bg">#000000</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
+    <color name="simona_splash_bg">#FFFFFF</color>
 
     <!-- Toast -->
     <color name="simona_toast_bg">#FFFFFF</color>

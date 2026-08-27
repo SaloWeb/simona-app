@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Transición global de Activities (unifica el "salto en seco" entre
+     pantallas). Sutil a propósito: fade + slide corto, 220ms, para que se
+     sienta pulido sin volverse lento en la demo. -->
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <alpha
+        android:duration="220"
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        android:interpolator="@android:interpolator/decelerate_quint" />
+    <translate
+        android:duration="220"
+        android:fromXDelta="6%"
+        android:toXDelta="0%"
+        android:interpolator="@android:interpolator/decelerate_quint" />
+</set>
