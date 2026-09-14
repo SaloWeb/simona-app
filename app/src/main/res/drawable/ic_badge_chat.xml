@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!--
+        PLAN_MEJORAS_VISUAL_2.md, punto 11: ícono estándar Material
+        "chat_bubble" (globo con cola), tinteado en tiempo de ejecución
+        (mismo criterio que ic_wifi_signal/ic_camara/ic_pin_ubicacion).
+        Se usa chico (16dp) como badge sobre el FAB del asistente, para
+        comunicar "esto abre un chat" sin cambiar el avatar de Simona.
+    -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H7L3,22V4A2,2 0 0,1 4,2Z" />
+</vector>

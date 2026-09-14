@@ -57,7 +57,11 @@
     <!-- Estados de humedad -->
     <color name="simona_estado_seco">#C97A2B</color>
     <color name="simona_estado_optimo">#8DC035</color>
-    <color name="simona_estado_humedo">#1A75B3</color>
+    <!-- Unificado con simona_azul (PLAN_MEJORAS_UX_20.md, punto 9): eran dos
+         azules casi idénticos (#1A6FA8 vs #1A75B3) definidos por separado;
+         HuertaCardAdapter ya usaba simona_azul para este mismo estado en el
+         Home, así que esto es la única fuente de verdad ahora. -->
+    <color name="simona_estado_humedo">@color/simona_azul</color>
 
     <!-- Alias legacy -->
     <color name="simona_blue">@color/simona_azul</color>

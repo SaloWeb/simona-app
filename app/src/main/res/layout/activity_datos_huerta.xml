@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_header"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="@dimen/simona_space_lg">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                     android:clickable="true"
                     android:contentDescription="Volver"
                     android:focusable="true"
-                    android:padding="8dp"
+                    android:padding="@dimen/simona_space_xs"
                     android:src="@drawable/ic_volver"
                     app:tint="@color/simona_on_color" />
 
@@ -51,30 +51,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="@dimen/simona_space_lg">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_chip_resumen"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/simona_space">
 
                 <TextView
                     style="@style/RangoTitulo"
                     android:text="@string/label_nombre_huerta" />
 
-                <EditText
-                    android:id="@+id/etNombre"
+                <!-- PLAN_MEJORAS_VISUAL_2.md, punto 6: antes esta caja tenía
+                     hintEnabled (default true) además del TextView fijo de
+                     arriba ("Nombre de la huerta") — el hint interno
+                     ("Ej: Huerta del fondo") flotaba al borde de la caja al
+                     escribir, y quedaban dos líneas de texto chico apiladas
+                     que parecían la misma etiqueta repetida (confirmado con
+                     uiautomator dump). Con hintEnabled="false" el hint deja
+                     de flotar y queda como placeholder simple (desaparece
+                     al escribir, nunca compite con el label fijo). -->
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/simona_azul"
-                    android:hint="@string/hint_nombre_huerta"
-                    android:inputType="textCapSentences"
-                    android:maxLines="1"
-                    android:textColor="@color/simona_tinta"
-                    android:textColorHint="@color/simona_tinta_suave" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/simona_space_xs"
+                    app:boxStrokeColor="@color/simona_azul"
+                    app:hintTextColor="@color/simona_tinta_suave"
+                    app:hintEnabled="false"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_nombre_huerta"
+                        android:inputType="textCapSentences"
+                        android:maxLines="1"
+                        android:textColor="@color/simona_tinta" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/tvErrorNombre"
@@ -90,7 +106,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/simona_space_xs"
                     android:text="@string/ssid_fijo"
                     android:textColor="@color/simona_tinta_suave"
                     android:textSize="13sp" />
@@ -100,17 +116,26 @@
                     android:layout_marginTop="18dp"
                     android:text="@string/label_password_red" />
 
-                <EditText
-                    android:id="@+id/etPassword"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/simona_azul"
-                    android:hint="@string/hint_password_red"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:textColor="@color/simona_tinta"
-                    android:textColorHint="@color/simona_tinta_suave" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/simona_space_xs"
+                    app:boxStrokeColor="@color/simona_azul"
+                    app:hintTextColor="@color/simona_tinta_suave"
+                    app:hintEnabled="false"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/simona_tinta_suave"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_password_red"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:textColor="@color/simona_tinta" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/tvErrorPassword"
@@ -125,7 +150,7 @@
                 android:layout_marginTop="18dp"
                 android:background="@drawable/bg_chip_resumen"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/simona_space">
 
                 <TextView
                     style="@style/RangoTitulo"
@@ -138,10 +163,25 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
+                    <!-- PLAN_MEJORAS_VISUAL_2.md, punto 7: antes esta caja
+                         era un rectángulo completamente vacío sin ningún
+                         ícono que sugiriera "tocá para elegir una foto"
+                         (confirmado en captura real). ivFotoPlaceholderIcono
+                         se oculta/muestra en DatosHuertaActivity.kt en los
+                         mismos puntos donde ya se togglea ivFotoPreview. -->
                     <FrameLayout
                         android:layout_width="72dp"
                         android:layout_height="72dp"
                         android:background="@drawable/bg_bancal">
+
+                        <ImageView
+                            android:id="@+id/ivFotoPlaceholderIcono"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_camara"
+                            app:tint="@color/simona_tinta_suave" />
 
                         <ImageView
                             android:id="@+id/ivFotoPreview"
@@ -155,7 +195,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="@dimen/simona_space_sm"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
@@ -172,7 +212,7 @@
                             style="@style/Widget.Simona.Button.Secondary"
                             android:layout_width="wrap_content"
                             android:layout_height="42dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="@dimen/simona_space_xs"
                             android:text="@string/btn_elegir_foto"
                             android:textColor="@color/simona_azul" />
 
@@ -181,7 +221,7 @@
                             style="@style/Widget.Simona.Button.Secondary"
                             android:layout_width="wrap_content"
                             android:layout_height="42dp"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="@dimen/simona_space_xxs"
                             android:text="@string/btn_quitar_foto"
                             android:textColor="@color/simona_rojo"
                             android:visibility="gone" />
@@ -200,14 +240,38 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_terreno_croquis">
 
-                    <TextView
-                        android:id="@+id/tvCroquisHint"
+                    <!-- PLAN_MEJORAS_VISUAL_2.md, punto 7: mismo criterio
+                         que el placeholder de foto — un ícono de pin sobre
+                         el texto de ayuda, en vez de una caja vacía. Es
+                         puramente decorativo (no se togglea): cuando se fija
+                         un marcador real (mostrarMarcador() en
+                         DatosHuertaActivity.kt), tvCroquisHint pasa a GONE
+                         y con él este ícono, que vive en el mismo
+                         LinearLayout. -->
+                    <LinearLayout
+                        android:id="@+id/grupoCroquisHint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="@string/hint_croquis"
-                        android:textColor="@color/simona_tinta_suave"
-                        android:textSize="13sp" />
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_marginBottom="4dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_pin_ubicacion"
+                            app:tint="@color/simona_tinta_suave" />
+
+                        <TextView
+                            android:id="@+id/tvCroquisHint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hint_croquis"
+                            android:textColor="@color/simona_tinta_suave"
+                            android:textSize="13sp" />
+                    </LinearLayout>
 
                     <View
                         android:id="@+id/marcador"
@@ -224,7 +288,7 @@
                 style="@style/Widget.Simona.Button.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/simona_space_xl"
                 android:text="@string/guardar_y_continuar" />
         </LinearLayout>
     </LinearLayout>

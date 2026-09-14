@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/simona_space_xs"
     android:foreground="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
@@ -26,6 +26,19 @@
             android:layout_height="58dp"
             android:background="@drawable/bg_icon_circle">
 
+            <!--
+                PLAN_MEJORAS_VISUAL_2.md, punto 10: este ImageView forzaba
+                app:tint="@color/simona_azul", aplastando toda la paleta
+                de colores de los drawables ic_perfil_* (verde/rojo/marrón,
+                pensada para que cada perfil se lea distinto) a una
+                silueta plana de un solo color — la causa real de que los
+                íconos fueran difíciles de identificar (confirmado
+                comparando con activity_ajustar_rangos.xml, que muestra
+                el mismo ic_perfil_fruto SIN tint y ahí sí se lee bien
+                como fruta roja con hoja verde). Se saca el tint acá para
+                que los 9 perfiles se vean con su color propio, igual que
+                ya se veían en AjustarRangosActivity.
+            -->
             <ImageView
                 android:id="@+id/ivIconoPerfil"
                 android:layout_width="28dp"
@@ -33,7 +46,6 @@
                 android:layout_gravity="center"
                 android:contentDescription="@null"
                 android:scaleType="centerInside"
-                app:tint="@color/simona_azul"
                 tools:src="@drawable/ic_perfil_hoja" />
 
         </FrameLayout>
@@ -42,7 +54,7 @@
             android:id="@+id/tvNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/simona_space_sm"
             android:gravity="center"
             android:textColor="@color/simona_tinta"
             android:textSize="15sp"
@@ -53,7 +65,7 @@
             android:id="@+id/tvEjemplos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/simona_space_xxs"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"

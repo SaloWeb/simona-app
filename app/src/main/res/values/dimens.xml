@@ -3,9 +3,29 @@
     <dimen name="simona_radio">16dp</dimen>
     <dimen name="simona_radio_sm">12dp</dimen>
     <dimen name="simona_radio_xs">8dp</dimen>
-    <dimen name="simona_space">16dp</dimen>
-    <dimen name="simona_space_sm">12dp</dimen>
+
+    <!-- PLAN_MEJORAS_UX_20.md, punto 8: antes esta escala tenía solo 3
+         valores (16/12/8dp) pero los layouts reales usaban al menos 10
+         valores hardcodeados sin pasar por acá (relevado con grep sobre
+         android:padding*/layout_margin* en todo res/layout: 2,3,4,6,8,10,
+         12,14,16,18,20,22,24,32,96dp). Se amplía con los 3 escalones que
+         faltaban y más concentración de uso real (4/20/24dp — 14, 20 y 6
+         apariciones respectivamente) y se migran a @dimen los usos que
+         coinciden EXACTO con alguno de los 6 escalones de la escala
+         (4/8/12/16/20/24dp) vía sed sobre los atributos de padding/margin
+         de todos los layouts (ver CONTEXTO_PROYECTO.md, sección 10). Los
+         valores impares/intermedios (2,3,6,10,14,18,22,32,96dp) se dejan
+         hardcodeados a propósito: son ajustes finos puntuales, no parte
+         de una escala sistemática, y forzarlos a alguno de estos 6
+         escalones cambiaría el layout visual real en vez de solo
+         nombrarlo. -->
+    <dimen name="simona_space_xxs">4dp</dimen>
     <dimen name="simona_space_xs">8dp</dimen>
+    <dimen name="simona_space_sm">12dp</dimen>
+    <dimen name="simona_space">16dp</dimen>
+    <dimen name="simona_space_lg">20dp</dimen>
+    <dimen name="simona_space_xl">24dp</dimen>
+
     <dimen name="simona_header_logo">36dp</dimen>
     <dimen name="simona_perfil_icon">40dp</dimen>
     <dimen name="simona_card_pad">16dp</dimen>

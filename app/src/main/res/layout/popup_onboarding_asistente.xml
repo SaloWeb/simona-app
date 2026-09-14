@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    PLAN_MEJORAS_UX_20.md, punto 19: tooltip de onboarding que se muestra
+    UNA sola vez (persistido en OnboardingPrefs) la primera vez que el
+    usuario ve MapaHuertasActivity, señalando el FAB del asistente de IA
+    "Simona" — sin esto, es fácil que un usuario nuevo no note que existe.
+    Se muestra como PopupWindow anclado al FAB (ver
+    MapaHuertasActivity.mostrarOnboardingAsistenteSiHaceFalta()).
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="220dp"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/simona_tinta"
+    app:cardCornerRadius="@dimen/simona_radio_sm"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/simona_space_sm">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_asistente_titulo"
+            android:textColor="@color/simona_blanco"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/simona_space_xxs"
+            android:text="@string/onboarding_asistente_texto"
+            android:textColor="@color/simona_on_header_muted"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/btnCerrarOnboarding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/simona_space_xs"
+            android:background="?attr/selectableItemBackground"
+            android:padding="@dimen/simona_space_xxs"
+            android:text="@string/btn_entendido"
+            android:textColor="@color/simona_verde_logo"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

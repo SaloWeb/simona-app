@@ -4,8 +4,10 @@
          Overrides de modo oscuro — calcados 1:1 del bloque
          [data-theme="dark"] de DASHBOARD_HTML. Solo se listan los tokens que
          el HTML efectivamente redefine en oscuro; azul, azul_oscuro,
-         azul_suave, marron, marron_oscuro, rojo y los estados de humedad se
+         marron, marron_oscuro, rojo y los estados de humedad se
          mantienen iguales en ambos modos (igual que en el simulador).
+         `simona_azul_suave` SÍ se redefine acá abajo (PLAN_MEJORAS_UX_20.md,
+         punto 12 — este comentario estaba desactualizado).
          ===================================================================== -->
 
     <color name="simona_verde">#82B23E</color>

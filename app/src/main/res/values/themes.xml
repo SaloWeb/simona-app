@@ -31,6 +31,25 @@
         <item name="materialButtonStyle">@style/Widget.Simona.Button</item>
         <item name="textAppearanceBodyLarge">@style/TextAppearance.Simona.BodyLarge</item>
         <item name="textAppearanceTitleLarge">@style/TextAppearance.Simona.TitleLarge</item>
+        <!-- PLAN_MEJORAS_VISUAL_2.md, punto 5: sin esto, todo
+             MaterialAlertDialogBuilder que use .setItems()/.setMessage() sin
+             un .setView() propio (ej. el diálogo "Opciones de [huerta]" en
+             MapaHuertasActivity.kt) toma el fondo por defecto de Material3
+             (colorSurfaceContainerHigh de la paleta neutra baseline, que se
+             ve gris-lila frío), sin importar que colorSurface ya esté
+             definido más arriba — el fondo del diálogo M3 se pinta con
+             colorSurfaceContainerHigh, no con colorSurface. -->
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Simona.MaterialAlertDialog</item>
+    </style>
+
+    <!-- PLAN_MEJORAS_VISUAL_2.md, punto 5: fuerza la paleta cálida del
+         proyecto en TODOS los MaterialAlertDialogBuilder de la app, sin
+         tener que agregar un .setView() a cada uno. -->
+    <style name="ThemeOverlay.Simona.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorSurfaceContainerHigh">@color/simona_superficie</item>
+        <item name="colorSurface">@color/simona_superficie</item>
+        <item name="colorOnSurface">@color/simona_tinta</item>
+        <item name="colorPrimary">@color/simona_azul</item>
     </style>
 
     <style name="TextAppearance.Simona.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
@@ -102,10 +121,16 @@
          100% nativo, sin título/subtítulo).
          postSplashScreenTheme define a qué tema pasa la Activity apenas el
          sistema retira la splash: el mismo NoActionBar que ya usaba
-         SplashActivity antes de este cambio. -->
+         SplashActivity antes de este cambio.
+         PLAN_MEJORAS_UX_20.md, punto 18: windowSplashScreenAnimatedIcon
+         pasa de ic_splash_logo (PNG estático) a ic_splash_logo_animated
+         (AnimatedVectorDrawable, ver res/drawable/), con
+         windowSplashScreenAnimationDuration agregado (obligatorio para que
+         el scale-in se reproduzca en vez de solo mostrarse fijo). -->
     <style name="Theme.Simona.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@drawable/bg_splash_screen</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo_animated</item>
+        <item name="windowSplashScreenAnimationDuration">650</item>
         <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
         <item name="postSplashScreenTheme">@style/Theme.Simona.NoActionBar</item>
     </style>
@@ -165,6 +190,18 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!-- PLAN_MEJORAS_VISUAL_2.md, punto 8: sin esto, el track se veía como
+         una fila de puntos discretos (por el stepSize de cada slider) en
+         vez de una línea continua — aspecto "entrecortado" confirmado en
+         captura real. Corrección durante la implementación: el atributo
+         moderno tickVisibilityMode (el que documenta developer.android.com
+         hoy) NO existe todavía en Material Components 1.12.0 — la versión
+         que usa este proyecto —, confirmado por un fallo real de
+         `./gradlew compileDebugKotlin` ("style attribute
+         'attr/tickVisibilityMode' not found") al intentar usarlo. Se usa
+         en cambio el atributo tickVisible (deprecado desde una versión
+         posterior de Material, pero presente y funcional en 1.12.0), que
+         logra el mismo resultado visual. -->
     <style name="RangoSlider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -172,6 +209,7 @@
         <item name="trackColorInactive">@color/simona_linea</item>
         <item name="thumbColor">@color/simona_azul</item>
         <item name="haloColor">@color/simona_azul_suave</item>
+        <item name="tickVisible">false</item>
     </style>
 
 </resources>

@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/bg_header"
-            android:padding="20dp">
+            android:padding="@dimen/simona_space_lg">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                     android:clickable="true"
                     android:contentDescription="Volver"
                     android:focusable="true"
-                    android:padding="8dp"
+                    android:padding="@dimen/simona_space_xs"
                     android:src="@drawable/ic_volver"
                     app:tint="@color/simona_on_color" />
 
@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="@dimen/simona_space_lg">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnUsarRecomendados"
@@ -116,13 +116,160 @@
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
+            <!-- PLAN_MEJORAS_VISUAL_2.md, punto 2: antes, en el estado
+                 inicial (antes de tocar "Ajustar manualmente"), la pantalla
+                 solo mostraba el botón + el link de arriba y nada más —
+                 confirmado en captura real: el contenido terminaba en
+                 y≈530 de 1650, ~60% de la pantalla en blanco. Este resumen
+                 en modo lectura de los 4 rangos del perfil (los mismos
+                 valores que ya trae "Usar valores recomendados") llena ese
+                 espacio con información útil en vez de dejarlo vacío. Se
+                 oculta al entrar a modo manual (mostrarSlidersManualmente()
+                 en AjustarRangosActivity.kt), donde los sliders ya muestran
+                 los mismos valores de forma editable. -->
+            <LinearLayout
+                android:id="@+id/resumenRangos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_chip_resumen"
+                android:orientation="vertical"
+                android:padding="@dimen/simona_space">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/resumen_rangos_titulo"
+                    android:textColor="@color/simona_tinta_suave"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rango_humedad"
+                        android:textColor="@color/simona_tinta"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvResumenHumedad"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/simona_tinta"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="40% — 65%" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/simona_linea" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rango_ph"
+                        android:textColor="@color/simona_tinta"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvResumenPh"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/simona_tinta"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="6.0 — 7.0" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/simona_linea" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rango_luz"
+                        android:textColor="@color/simona_tinta"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvResumenLuz"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/simona_tinta"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="300 — 650 lux" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/simona_linea" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rango_temp"
+                        android:textColor="@color/simona_tinta"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvResumenTemp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/simona_tinta"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="15°C — 24°C" />
+                </LinearLayout>
+            </LinearLayout>
+
             <!-- Grupo de sliders, oculto hasta tocar "Ajustar manualmente" -->
             <LinearLayout
                 android:id="@+id/grupoManual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/simona_space_xs"
                 android:visibility="gone">
 
                 <!-- ===== Humedad del suelo ===== -->
@@ -165,11 +312,19 @@
                         android:inputType="numberDecimal" />
                     <TextView style="@style/RangoUnidad" android:text="" />
                 </LinearLayout>
+                <!-- PLAN_MEJORAS_VISUAL_2.md, punto 8: valueFrom/valueTo
+                     acotado de 0–14 a 4.0–9.0. Los 9 perfiles de
+                     PerfilesCultivo.kt van de pH 5.5 a 7.5, así que ningún
+                     valor de partida queda afuera; un pH de suelo fuera de
+                     4–9 no tiene sentido agronómico. Con esto el rango
+                     configurable (5.5–7.5, el más angosto de los 4) ocupa
+                     una porción mucho mayor del track en vez de quedar casi
+                     superpuesto en el centro de una escala 0–14. -->
                 <com.google.android.material.slider.RangeSlider
                     android:id="@+id/sliderPh"
                     style="@style/RangoSlider"
-                    android:valueFrom="0"
-                    android:valueTo="14"
+                    android:valueFrom="4.0"
+                    android:valueTo="9.0"
                     android:stepSize="0.1" />
 
                 <!-- ===== Luminosidad ===== -->
@@ -221,7 +376,7 @@
                 style="@style/Widget.Simona.Button.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/simona_space_lg"
                 android:text="@string/continuar"
                 android:visibility="gone"
                 tools:visibility="visible" />

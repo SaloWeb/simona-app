@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- PLAN_MEJORAS_UX_20.md, punto 16: variante de bg_chip_resumen con borde
+     de acento para marcar cuál de los 3 chips de resumen está activo como
+     filtro de la lista de huertas. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/simona_card_bg" />
+    <stroke android:width="2dp" android:color="@color/simona_azul" />
+    <corners android:radius="14dp" />
+</shape>

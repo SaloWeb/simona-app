@@ -1,267 +1,325 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    PLAN_MEJORAS_UX_20.md, punto 11: antes TODO el contenido (header,
+    chips, tabs, estado vacío, lista Y mapa) vivía dentro de un único
+    NestedScrollView, con el RecyclerView de huertas en wrap_content y
+    nestedScrollingEnabled=false — eso anula el reciclado de vistas del
+    RecyclerView (infla todas las tarjetas de una sola vez, exactamente
+    el problema que el refactor del punto 7 de PLAN_MEJORAS_20.md había
+    resuelto para el resto de la Activity). Ahora: el header y los
+    chips/tabs quedan fijos arriba (wrap_content, no scrollean), y
+    "contenidoHome" pasa a ser un FrameLayout de altura flexible (0dp +
+    weight=1) que aloja UNA de tres alternativas visibles por vez
+    (estadoVacio / seccionLista / seccionMapa, mismos ids e igual
+    lógica de visibilidad en MapaHuertasActivity.kt, sin cambios ahí):
+    estadoVacio y seccionMapa van envueltos en su propio
+    NestedScrollView (contenido corto, no necesitan reciclado), y
+    seccionLista aloja el RecyclerView con layout_height=0dp+weight=1,
+    que ahora sí scrollea y recicla por sí mismo.
+-->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/simona_superficie"
-    android:animateLayoutChanges="true">
+    android:background="@color/simona_superficie">
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:clipToPadding="false">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_header"
             android:orientation="vertical"
-            android:paddingBottom="96dp">
+            android:paddingStart="@dimen/simona_space_lg"
+            android:paddingTop="18dp"
+            android:paddingEnd="@dimen/simona_space_lg"
+            android:paddingBottom="18dp">
 
+            <!-- Bug UI/UX #1 (histórico): "Nueva huerta" había pasado a su
+                 propia fila para que el título SIMONA no se cortara en
+                 pantallas normales (~360dp) al competir con el toggle de
+                 tema y este botón en la misma fila.
+                 PLAN_MEJORAS_UX_20.md, punto 17: esa fila extra a todo lo
+                 ancho dejaba un salto vertical brusco. Se unificó todo
+                 en UNA sola fila horizontal: logo + columna de
+                 título/subtítulo (weight=1, sigue con todo el ancho
+                 libre que necesita) y, a la derecha, una columna angosta
+                 con el toggle de tema arriba y el botón apilado debajo
+                 — ya no es una fila aparte a todo el ancho del header,
+                 es el mismo bloque visual que el logo/título. -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_header"
-                android:orientation="vertical"
-                android:paddingStart="20dp"
-                android:paddingTop="18dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="24dp">
+                android:gravity="top"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/simona_header_logo"
+                    android:layout_height="@dimen/simona_header_logo"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/logo_simona" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/simona_space_sm"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/simona_header_logo"
-                        android:layout_height="@dimen/simona_header_logo"
-                        android:contentDescription="@string/app_name"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/logo_simona" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:text="@string/app_name"
+                        android:textAppearance="@style/TextAppearance.Simona.HeaderTitle" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:text="@string/app_name"
-                            android:textAppearance="@style/TextAppearance.Simona.HeaderTitle" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/home_subtitulo"
+                        android:textAppearance="@style/TextAppearance.Simona.HeaderSubtitle" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/home_subtitulo"
-                            android:textAppearance="@style/TextAppearance.Simona.HeaderSubtitle" />
-                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/btnThemeToggle"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:padding="8dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="end"
+                        android:padding="@dimen/simona_space_sm"
                         android:src="@drawable/ic_luna"
-                        android:contentDescription="Toggle theme"
+                        android:contentDescription="@string/content_desc_cambiar_tema"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         app:tint="@color/simona_on_accent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnNuevaHuerta"
+                        style="@style/Widget.Simona.Button.Header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="2dp"
+                        android:paddingStart="@dimen/simona_space_sm"
+                        android:paddingEnd="14dp"
+                        android:text="@string/nueva_huerta"
+                        app:icon="@drawable/ic_agregar"
+                        app:iconGravity="textStart"
+                        app:iconPadding="4dp"
+                        app:iconTint="@color/simona_on_accent" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/simona_space"
+            android:paddingTop="@dimen/simona_space"
+            android:paddingEnd="@dimen/simona_space">
+
+            <LinearLayout
+                android:id="@+id/resumenChipsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:weightSum="3"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/chipTotal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_chip_resumen"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/simona_space_sm">
+
+                    <TextView
+                        android:id="@+id/tvChipTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/simona_tinta"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/home_chip_total"
+                        android:textColor="@color/simona_tinta_suave"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Bug UI/UX #1: "Nueva huerta" pasa a su propia fila para
-                     que el título SIMONA (columna con weight=1 de arriba)
-                     tenga todo el ancho disponible y no se corte en
-                     pantallas normales (~360dp), donde antes competía con
-                     el toggle de tema (40dp) y este botón en la misma fila. -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnNuevaHuerta"
-                    style="@style/Widget.Simona.Button.Header"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/chipConSed"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="14dp"
-                    android:text="@string/nueva_huerta"
-                    app:icon="@drawable/ic_agregar"
-                    app:iconGravity="textStart"
-                    app:iconPadding="4dp"
-                    app:iconTint="@color/simona_on_accent" />
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_chip_resumen"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/simona_space_sm">
+
+                    <TextView
+                        android:id="@+id/tvChipConSed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/simona_tinta_suave"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/home_chip_con_sed"
+                        android:textColor="@color/simona_tinta_suave"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/chipOptimas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_chip_resumen"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/simona_space_sm">
+
+                    <TextView
+                        android:id="@+id/tvChipOptimas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/simona_verde"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/home_chip_optimas"
+                        android:textColor="@color/simona_tinta_suave"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/tabsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_chip_resumen"
+                android:orientation="horizontal"
+                android:padding="@dimen/simona_space_xxs"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tabBtnLista"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/simona_azul_suave"
+                    android:elevation="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/home_tab_lista"
+                    android:textAllCaps="false"
+                    android:textColor="@color/simona_azul"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="8dp"
+                    app:strokeColor="@color/tab_stroke_selector"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tabBtnMapa"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="@dimen/simona_space_xxs"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/simona_superficie"
+                    android:elevation="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/home_tab_mapa"
+                    android:textAllCaps="false"
+                    android:textColor="@color/simona_tinta_suave"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="8dp"
+                    app:strokeColor="@color/tab_stroke_selector"
+                    app:strokeWidth="1dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/contenidoHome"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/estadoVacio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:fillViewport="true"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <LinearLayout
-                    android:id="@+id/resumenChipsContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="3"
-                    tools:visibility="visible">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="6dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_chip_resumen"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:id="@+id/tvChipTotal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/simona_tinta"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/home_chip_total"
-                            android:textColor="@color/simona_tinta_suave"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginEnd="3dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_chip_resumen"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:id="@+id/tvChipConSed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/simona_tinta_suave"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/home_chip_con_sed"
-                            android:textColor="@color/simona_tinta_suave"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_chip_resumen"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:id="@+id/tvChipOptimas"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/simona_verde"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/home_chip_optimas"
-                            android:textColor="@color/simona_tinta_suave"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tabsContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:background="@drawable/bg_chip_resumen"
-                    android:orientation="horizontal"
-                    android:padding="4dp"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/tabBtnLista"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/simona_azul_suave"
-                        android:elevation="0dp"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        android:text="@string/home_tab_lista"
-                        android:textAllCaps="false"
-                        android:textColor="@color/simona_azul"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="8dp"
-                        app:strokeColor="@color/tab_stroke_selector"
-                        app:strokeWidth="1dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/tabBtnMapa"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/simona_card_bg"
-                        android:elevation="0dp"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        android:text="@string/home_tab_mapa"
-                        android:textAllCaps="false"
-                        android:textColor="@color/simona_tinta_suave"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="8dp"
-                        app:strokeColor="@color/tab_stroke_selector"
-                        app:strokeWidth="1dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/estadoVacio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
                     android:background="@drawable/bg_chip_resumen"
                     android:gravity="center"
+                    android:layout_marginStart="@dimen/simona_space"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="@dimen/simona_space"
+                    android:layout_marginBottom="96dp"
                     android:orientation="vertical"
-                    android:padding="32dp"
-                    android:visibility="gone"
-                    tools:visibility="visible">
+                    android:padding="32dp">
 
                     <FrameLayout
                         android:layout_width="78dp"
@@ -289,7 +347,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/simona_space_xs"
                         android:gravity="center"
                         android:lineSpacingExtra="2dp"
                         android:text="@string/home_vacio_texto"
@@ -306,38 +364,86 @@
                         app:icon="@drawable/ic_agregar"
                         app:iconTint="@color/simona_on_color" />
                 </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
 
-                <LinearLayout
-                    android:id="@+id/seccionLista"
+            <LinearLayout
+                android:id="@+id/seccionLista"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/simona_space"
+                android:paddingTop="14dp"
+                android:paddingEnd="@dimen/simona_space"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvContadorHuertas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/home_tus_huertas"
+                    android:textColor="@color/simona_tinta"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <!-- PLAN_MEJORAS_VISUAL_2.md, punto 3: con 1-2 huertas
+                     cargadas, el RecyclerView deja mucho espacio vertical
+                     sin usar debajo de las tarjetas. Este tip ocupa parte
+                     de ese espacio con una sugerencia útil en vez de
+                     dejarlo en blanco. Se muestra debajo de la lista
+                     (layout_height=wrap_content, no compite por espacio
+                     con el RecyclerView que sigue con weight=1) y su
+                     visibilidad la controla cargarDatos() en
+                     MapaHuertasActivity.kt según el TOTAL sin filtrar de
+                     huertas (no el filtrado, para no aparecer/desaparecer
+                     al tocar los chips de filtro). -->
+                <TextView
+                    android:id="@+id/tvTipPocasHuertas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_chip_resumen"
+                    android:gravity="center"
+                    android:padding="@dimen/simona_space_sm"
+                    android:text="@string/home_tip_pocas_huertas"
+                    android:textColor="@color/simona_tinta_suave"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
-                    <TextView
-                        android:id="@+id/tvContadorHuertas"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/home_tus_huertas"
-                        android:textColor="@color/simona_tinta"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipeRefreshHuertas"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-                    <LinearLayout
-                        android:id="@+id/listaHeatmapsContainer"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvHuertas"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
-                </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:paddingBottom="96dp"
+                        android:overScrollMode="always"
+                        tools:listitem="@layout/item_huerta_card" />
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/seccionMapa"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:fillViewport="true"
+                android:visibility="gone">
 
                 <LinearLayout
-                    android:id="@+id/seccionMapa"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:paddingStart="@dimen/simona_space"
+                    android:paddingTop="14dp"
+                    android:paddingEnd="@dimen/simona_space"
+                    android:paddingBottom="96dp">
 
                     <FrameLayout
                         android:id="@+id/mapaContainer"
@@ -346,38 +452,66 @@
                         android:background="@drawable/bg_terreno_croquis" />
 
                     <TextView
+                        android:id="@+id/tvMapaHint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:text="@string/home_mapa_hint"
                         android:textColor="@color/simona_tinta_suave"
                         android:textSize="12sp" />
                 </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
+        </FrameLayout>
+    </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+    <!--
+        PLAN_MEJORAS_VISUAL_2.md, punto 11: el FAB solo (avatar de Simona)
+        no comunica "tocá para chatear" a un usuario nuevo. El FrameLayout
+        agrega margen extra a la derecha/arriba (10dp) solo para poder
+        superponer el badge de chat sin que se corte contra el borde de
+        pantalla, sin cambiar el tamaño ni la posición visual del propio
+        FAB (que sigue en bottom|end con el mismo margen de siempre).
+    -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="8dp"
-        app:strokeWidth="0dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="@dimen/simona_space_lg"
+        android:layout_marginBottom="@dimen/simona_space_lg">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="8dp"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:id="@+id/fabAiSimona"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:contentDescription="@string/asistente_titulo"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_asistente_simona" />
+        </com.google.android.material.card.MaterialCardView>
 
         <ImageView
-            android:id="@+id/fabAiSimona"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:contentDescription="@string/asistente_titulo"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_asistente_simona" />
-    </com.google.android.material.card.MaterialCardView>
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="-6dp"
+            android:layout_marginEnd="-6dp"
+            android:background="@drawable/bg_badge_chat"
+            android:contentDescription="@null"
+            android:elevation="8dp"
+            android:padding="3dp"
+            android:src="@drawable/ic_badge_chat" />
+    </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-

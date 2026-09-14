@@ -26,6 +26,14 @@
     <string name="home_rango_ideal">%1$s · Ideal %2$d%% – %3$d%%</string>
     <string name="home_contador_una">1 huerta registrada</string>
     <string name="home_contador_varias">%1$d huertas registradas</string>
+    <string name="home_tip_pocas_huertas">💡 Agregá otra huerta para comparar su estado lado a lado</string>
+    <!-- PLAN_MEJORAS_VISUAL_2.md, punto 9: mensaje específico para la
+         pestaña "Croquis" cuando hay huertas cargadas sin posición
+         asignada (paso opcional de DatosHuertaActivity) — antes se veía
+         el mismo home_mapa_hint genérico sin ninguna pista de que esas
+         huertas existen pero no aparecen en el mapa. -->
+    <string name="home_mapa_hint_sin_ubicar_una">Tenés 1 huerta sin ubicar en el croquis — abrila y tocá "Editar" para asignarle una posición</string>
+    <string name="home_mapa_hint_sin_ubicar_varias">Tenés %1$d huertas sin ubicar en el croquis — abrilas y tocá "Editar" para asignarles una posición</string>
     <string name="asistente_titulo">Asistente Simona</string>
     <string name="asistente_bienvenida">Hola. Soy Simona, tu asistente agronómica. Preguntame sobre cuidados, humedad, riego o consejos para tus huertas.</string>
     <string name="asistente_hint">Preguntale algo a Simona…</string>
@@ -34,6 +42,15 @@
     <string name="asistente_pensando">Simona está pensando…</string>
     <string name="asistente_error_prefijo">Error</string>
     <string name="enviar">Enviar</string>
+    <!-- PLAN_MEJORAS_20.md, punto 19: contentDescription de accesibilidad,
+         antes hardcodeada en inglés ("Toggle theme") directo en el layout,
+         inconsistente con la convención del proyecto (todo en español). -->
+    <string name="content_desc_cambiar_tema">Cambiar tema</string>
+    <string name="content_desc_eliminar_evento_bitacora">Eliminar evento</string>
+    <!-- PLAN_MEJORAS_20.md, punto 19: GaugeHumedadView es un View de Canvas
+         puro (el % se dibuja como píxeles, no como texto real) — sin esta
+         contentDescription, TalkBack no anuncia nada al enfocarlo. -->
+    <string name="gauge_humedad_descripcion">Humedad %1$d por ciento, %2$s</string>
     <string name="opciones_huerta_cd">Opciones de %1$s</string>
 
     <string name="status_disconnected_title">No estás conectado a SIMONA</string>
@@ -47,6 +64,8 @@
     <string name="error_timeout">No se encontró la red SIMONA. Acercate al dispositivo y volvé a intentar.</string>
     <string name="error_connection_lost">Se perdió la conexión con SIMONA.</string>
     <string name="error_device_not_responding">Conectado a SIMONA, esperando al dispositivo…</string>
+    <!-- PLAN_MEJORAS_UX_20.md, punto 14 -->
+    <string name="dashboard_cargando">Cargando panel…</string>
 
     <!--
         Fase 2.1 — Modo demo vs. modo hardware real.
@@ -75,6 +94,9 @@
     <string name="ajustar_rangos_titulo">Ajustá los rangos</string>
     <string name="usar_valores_recomendados">Usar valores recomendados</string>
     <string name="ajustar_manualmente">Ajustar manualmente</string>
+    <!-- PLAN_MEJORAS_VISUAL_2.md, punto 2 -->
+    <string name="resumen_rangos_titulo">Rangos sugeridos para este perfil</string>
+    <string name="resumen_rango_valor">%1$s — %2$s%3$s</string>
     <string name="continuar">Continuar</string>
     <string name="rango_humedad">Humedad del suelo</string>
     <string name="rango_ph">pH del suelo</string>
@@ -162,4 +184,55 @@
     <string name="diagnostico_paso4_titulo">Probá de nuevo</string>
     <string name="diagnostico_paso4_desc">Con estos pasos hechos, tocá el botón de abajo para reintentar la conexión.</string>
     <string name="btn_reintentar_conexion">Reintentar conexión</string>
+    <string name="btn_ver_diagnostico">¿Por qué no conecta?</string>
+    <!-- PLAN_MEJORAS_UX_20.md, punto 10: título del diálogo en sí (distinto
+         de diagnostico_titulo, que es el mensaje corto de ConnectionState.Error). -->
+    <string name="diagnostico_titulo_dialogo">Asistente de resolución de problemas</string>
+
+    <!-- PLAN_MEJORAS_UX_20.md, punto 10: textos que estaban hardcodeados
+         directo en activity_detalle_huerta.xml. -->
+    <string name="detalle_sin_lecturas_titulo">Todavía no hay lecturas de esta huerta.</string>
+    <string name="detalle_sin_lecturas_desc">Conectate al dispositivo desde el dashboard en vivo para empezar a registrar datos.</string>
+    <string name="detalle_ir_dashboard">Ir al dashboard en vivo</string>
+    <string name="detalle_mapa_metricas">Mapa de métricas</string>
+    <string name="detalle_deposito_agua">Depósito de agua</string>
+    <string name="detalle_tendencia_reciente">Tendencia reciente</string>
+    <string name="detalle_chip_humedad">Humedad</string>
+    <string name="detalle_chip_temp">Temp.</string>
+
+    <!-- Cambio de arquitectura (ver CONTEXTO_PROYECTO.md secciones 2/3):
+         DetalleHuertaActivity pasa a ser también el dashboard "en vivo"
+         cuando se llega acá recién conectado al AP de la huerta (antes
+         era un WebView aparte, DashboardActivity, ya eliminado). Estos
+         strings son para ese modo conectado. -->
+    <string name="detalle_banner_conectado_titulo">Conectado en vivo a esta huerta</string>
+    <string name="detalle_banner_conectado_desc">Los datos se actualizan solos mientras estés en esta pantalla</string>
+    <string name="detalle_btn_desconectar">Desconectar</string>
+    <string name="detalle_conectado_esperando_datos">Trayendo datos del dispositivo…</string>
+    <string name="detalle_riego_manual_activar">Activar riego</string>
+    <string name="detalle_riego_manual_detener">Detener riego</string>
+    <string name="detalle_btn_refill_tanque">Rellenar tanque</string>
+    <string name="detalle_btn_chat_simona">Hablar con Simona sobre esta huerta</string>
+    <string name="detalle_toast_riego_activado">Riego manual activado</string>
+    <string name="detalle_toast_riego_detenido">Riego manual detenido</string>
+    <string name="detalle_toast_tanque_rellenado">Tanque rellenado al 100%%</string>
+    <string name="detalle_error_comando_dispositivo">No se pudo enviar el comando al dispositivo</string>
+
+    <!-- PLAN_MEJORAS_UX_20.md, punto 10: título hardcodeado en
+         activity_tutorial_conexion.xml. -->
+    <string name="tutorial_conexion_titulo">Conexión WiFi</string>
+    <!-- PLAN_MEJORAS_VISUAL_2.md, punto 1: título del header nuevo de
+         TutorialConexionActivity (antes no tenía header en absoluto). -->
+    <string name="tutorial_header_titulo">Conectar huerta</string>
+
+    <!-- PLAN_MEJORAS_20.md, punto 12: aviso cuando HuertaRepository detecta
+         que el JSON guardado estaba corrupto y tuvo que arrancar vacío. -->
+    <string name="aviso_datos_corruptos_titulo">Hubo un problema leyendo tus huertas</string>
+    <string name="aviso_datos_corruptos_mensaje">No se pudieron leer los datos guardados de tus huertas (puede haber pasado por una actualización interrumpida o un error inesperado). Se generó una copia de seguridad del archivo original en el dispositivo, pero la lista de huertas quedó vacía y vas a tener que volver a cargarlas. Disculpá las molestias.</string>
+    <string name="btn_entendido">Entendido</string>
+
+    <!-- PLAN_MEJORAS_UX_20.md, punto 19: tooltip de onboarding del FAB del
+         asistente de IA, mostrado una sola vez (OnboardingPrefs). -->
+    <string name="onboarding_asistente_titulo">Conocé a Simona</string>
+    <string name="onboarding_asistente_texto">Tocá acá para preguntarle a tu asistente de IA sobre el cuidado de tus huertas.</string>
 </resources>
