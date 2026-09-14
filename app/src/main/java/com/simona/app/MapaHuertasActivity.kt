@@ -1,68 +1,75 @@
-
 package com.simona.app
 
-import android.app.AlertDialog
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.TypedValue
+import android.transition.Fade
+import android.transition.TransitionManager
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.slider.RangeSlider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.simona.app.databinding.ActivityMapaHuertasBinding
 
 /**
  * Home nativo de la app SIMONA: funciona 100% offline (sin depender del ESP32).
- * Muestra el resumen de huertas, lista en tarjetas ricas, croquis general del
- * predio con canteros, gestión de huertas (editar/eliminar) y acceso al asistente
- * de IA Simona usando la conexión a internet normal del teléfono.
+ * Muestra el resumen de huertas, lista en tarjetas ricas (RecyclerView, ver
+ * HuertaCardAdapter), croquis general del predio con canteros, gestión de
+ * huertas (editar/eliminar, ver DialogoEditarHuerta) y acceso al asistente
+ * de IA Simona (ver DialogoChatAi) usando la conexión a internet normal
+ * del teléfono.
  *
  * Al seleccionar una huerta, deriva a TutorialConexionActivity para conectar
  * el WiFi al ESP32 y abrir el Dashboard en tiempo real.
+ *
+ * PLAN_MEJORAS_20.md, puntos 7 y 10: esta Activity tenía ~800 líneas,
+ * armaba las tarjetas a mano con Views por código en vez de RecyclerView,
+ * usaba findViewById manual en vez de ViewBinding, y mezclaba
+ * AlertDialog.Builder con el resto del proyecto (que ya usaba
+ * MaterialAlertDialogBuilder). Se migró a ViewBinding + RecyclerView +
+ * MaterialAlertDialogBuilder de una sola vez, y los diálogos de "editar
+ * huerta" y "chat IA" se extrajeron a sus propias clases
+ * (DialogoEditarHuerta.kt, DialogoChatAi.kt) para que esta Activity quede
+ * solo orquestando. El croquis/mapa con pines (renderizarPines) no se tocó:
+ * no es una lista (no hay DiffUtil/adapter que aplicarle) y queda fuera del
+ * alcance de este punto del plan.
  */
 class MapaHuertasActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMapaHuertasBinding
     private lateinit var repository: HuertaRepository
-    private lateinit var mapaContainer: FrameLayout
-    private lateinit var listaHeatmapsContainer: LinearLayout
-    private lateinit var estadoVacio: LinearLayout
-    private lateinit var seccionLista: LinearLayout
-    private lateinit var seccionMapa: LinearLayout
-    private lateinit var resumenChipsContainer: LinearLayout
-    private lateinit var tabsContainer: LinearLayout
-    private lateinit var tabBtnLista: MaterialButton
-    private lateinit var tabBtnMapa: MaterialButton
-    private lateinit var tvChipTotal: TextView
-    private lateinit var tvChipConSed: TextView
-    private lateinit var tvChipOptimas: TextView
-    private lateinit var tvContadorHuertas: TextView
-    private lateinit var fabAiSimona: ImageView
+    private lateinit var adapter: HuertaCardAdapter
 
     private var vistaActual = "lista" // "lista" o "mapa"
 
-    // Fase 6.4 — foto opcional de la huerta que se está editando en ese
-    // momento (dialog_editar_huerta). Como el diálogo se infla de nuevo
-    // por cada huerta, el picker vive a nivel Activity (tiene que
-    // registrarse antes de STARTED) y estas variables apuntan al diálogo
-    // actualmente abierto para saber dónde volcar el resultado.
-    private var fotoUriEnEdicion: Uri? = null
-    private var ivFotoEnEdicion: ImageView? = null
-    private var btnQuitarFotoEnEdicion: View? = null
+    // PLAN_MEJORAS_UX_20.md, punto 16: los chips de resumen eran solo
+    // informativos (sin click listener) pero visualmente parecían
+    // tarjetas tocables. Ahora filtran la lista: null = sin filtro (total).
+    private var filtroActual: FiltroHuertas? = null
+
+    private enum class FiltroHuertas { CON_SED, OPTIMAS }
+
+    // Diálogo de "editar huerta" actualmente abierto (si hay uno), para
+    // poder pasarle el resultado del picker de fotos cuando vuelve —
+    // ActivityResultContracts exige registrarse a nivel Activity, así que
+    // el picker en sí no puede vivir dentro de DialogoEditarHuerta.
+    private var dialogoEditarActual: DialogoEditarHuerta? = null
 
     private val seleccionarFotoEditar = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             FotoHuertaUtil.persistirPermisoLectura(contentResolver, uri)
-            fotoUriEnEdicion = uri
-            mostrarPreviewFotoEditar(uri)
+            dialogoEditarActual?.actualizarFotoSeleccionada(uri)
         }
     }
 
@@ -75,35 +82,29 @@ class MapaHuertasActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mapa_huertas)
+        binding = ActivityMapaHuertasBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         repository = (application as SimonaApp).huertaRepository
 
-        mapaContainer = findViewById(R.id.mapaContainer)
-        listaHeatmapsContainer = findViewById(R.id.listaHeatmapsContainer)
-        estadoVacio = findViewById(R.id.estadoVacio)
-        seccionLista = findViewById(R.id.seccionLista)
-        seccionMapa = findViewById(R.id.seccionMapa)
-        resumenChipsContainer = findViewById(R.id.resumenChipsContainer)
-        tabsContainer = findViewById(R.id.tabsContainer)
-        tabBtnLista = findViewById(R.id.tabBtnLista)
-        tabBtnMapa = findViewById(R.id.tabBtnMapa)
-        tvChipTotal = findViewById(R.id.tvChipTotal)
-        tvChipConSed = findViewById(R.id.tvChipConSed)
-        tvChipOptimas = findViewById(R.id.tvChipOptimas)
-        tvContadorHuertas = findViewById(R.id.tvContadorHuertas)
-        fabAiSimona = findViewById(R.id.fabAiSimona)
+        adapter = HuertaCardAdapter(
+            onClick = { huerta -> abrirDashboardHuerta(huerta) },
+            onLongClick = { huerta -> mostrarOpcionesHuerta(huerta) },
+            onEstadoClick = { huerta -> startActivity(DetalleHuertaActivity.crearIntent(this, huerta.id)) },
+            onOpcionesClick = { huerta -> mostrarOpcionesHuerta(huerta) }
+        )
+        binding.rvHuertas.layoutManager = LinearLayoutManager(this)
+        binding.rvHuertas.adapter = adapter
 
-        findViewById<View>(R.id.btnNuevaHuerta).setOnClickListener {
+        binding.btnNuevaHuerta.setOnClickListener {
             startActivity(SeleccionarPerfilActivity.crearIntent(this))
         }
-        findViewById<View>(R.id.btnNuevaHuertaVacio).setOnClickListener {
+        binding.btnNuevaHuertaVacio.setOnClickListener {
             startActivity(SeleccionarPerfilActivity.crearIntent(this))
         }
 
         // Setup theme toggle button (light / dark)
-        val btnTheme = findViewById<View>(R.id.btnThemeToggle)
-        btnTheme?.setOnClickListener {
+        binding.btnThemeToggle.setOnClickListener {
             val currentlyDark = ThemePrefs.isDark(this)
             ThemePrefs.setDark(this, !currentlyDark)
             // Update icon immediately and recreate to apply theme changes
@@ -113,14 +114,97 @@ class MapaHuertasActivity : AppCompatActivity() {
         // Initialize icon based on current preference
         updateThemeIcon(ThemePrefs.isDark(this))
 
-        tabBtnLista.setOnClickListener { cambiarPestana("lista") }
-        tabBtnMapa.setOnClickListener { cambiarPestana("mapa") }
+        binding.tabBtnLista.setOnClickListener { cambiarPestana("lista") }
+        binding.tabBtnMapa.setOnClickListener { cambiarPestana("mapa") }
 
-        fabAiSimona.setOnClickListener { abrirChatAi() }
+        // PLAN_MEJORAS_UX_20.md, punto 15: antes la única forma de
+        // refrescar la lista era volver a entrar a la pantalla (onResume).
+        // cargarDatos() ya relee HuertaRepository (100% local/sincrónico,
+        // sin red), así que el gesto termina casi al instante — el
+        // isRefreshing=false se hace en el mismo hilo, sin post() ni
+        // delay artificial.
+        binding.swipeRefreshHuertas.setColorSchemeResources(R.color.simona_azul)
+        binding.swipeRefreshHuertas.setOnRefreshListener {
+            cargarDatos()
+            binding.swipeRefreshHuertas.isRefreshing = false
+        }
+
+        binding.chipTotal.setOnClickListener { aplicarFiltro(null) }
+        binding.chipConSed.setOnClickListener { aplicarFiltro(FiltroHuertas.CON_SED) }
+        binding.chipOptimas.setOnClickListener { aplicarFiltro(FiltroHuertas.OPTIMAS) }
+
+        binding.fabAiSimona.setOnClickListener { DialogoChatAi.mostrar(this, repository) }
 
         pedirPermisoNotificacionesSiHaceFalta()
 
+        // cargarDatos() es lo que dispara el primer repository.listar() de
+        // esta sesión — chequear la bandera de corrupción DESPUÉS de esa
+        // llamada, no antes, para no perderse la corrupción detectada en
+        // esta misma carga.
         cargarDatos()
+
+        if (repository.consumirAvisoDeCorrupcion()) {
+            mostrarAvisoDatosCorruptos()
+        }
+
+        mostrarOnboardingAsistenteSiHaceFalta()
+    }
+
+    /**
+     * PLAN_MEJORAS_UX_20.md, punto 19: es fácil que un usuario nuevo no
+     * note el FAB del asistente de IA la primera vez que abre la app.
+     * Muestra un tooltip apuntándolo UNA sola vez (persistido en
+     * OnboardingPrefs, mismo patrón que ThemePrefs). El FAB vive fuera de
+     * contenidoHome (siempre visible, incluso con la lista vacía), así
+     * que no depende de si ya hay huertas cargadas.
+     */
+    private fun mostrarOnboardingAsistenteSiHaceFalta() {
+        if (OnboardingPrefs.fabIaYaVisto(this)) return
+
+        binding.fabAiSimona.post {
+            if (isFinishing || isDestroyed) return@post
+
+            val popupView = layoutInflater.inflate(R.layout.popup_onboarding_asistente, null)
+            popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+
+            val popupWindow = PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+            )
+            popupWindow.elevation = 8f
+
+            fun cerrar() {
+                OnboardingPrefs.marcarFabIaVisto(this)
+                if (popupWindow.isShowing) popupWindow.dismiss()
+            }
+
+            popupView.findViewById<TextView>(R.id.btnCerrarOnboarding).setOnClickListener { cerrar() }
+            popupWindow.setOnDismissListener { OnboardingPrefs.marcarFabIaVisto(this) }
+
+            // Ancla el tooltip arriba del FAB, con su borde derecho
+            // alineado al del FAB (el FAB es angosto — 56dp —, la tarjeta
+            // del tooltip es más ancha, así que hay que compensar en X).
+            val xOffset = binding.fabAiSimona.width - popupView.measuredWidth
+            val yOffset = -(binding.fabAiSimona.height + popupView.measuredHeight + 12.dpToPx())
+            popupWindow.showAsDropDown(binding.fabAiSimona, xOffset, yOffset, Gravity.NO_GRAVITY)
+        }
+    }
+
+    /**
+     * PLAN_MEJORAS_20.md, punto 12: si HuertaRepository detectó JSON
+     * corrupto la última vez que se leyó (ver HuertaRepository.listar()),
+     * avisar una única vez en vez de que la lista de huertas aparezca
+     * vacía sin ninguna explicación.
+     */
+    private fun mostrarAvisoDatosCorruptos() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.aviso_datos_corruptos_titulo)
+            .setMessage(R.string.aviso_datos_corruptos_mensaje)
+            .setPositiveButton(R.string.btn_entendido, null)
+            .setCancelable(true)
+            .show()
     }
 
     private fun pedirPermisoNotificacionesSiHaceFalta() {
@@ -140,22 +224,30 @@ class MapaHuertasActivity : AppCompatActivity() {
     private fun cambiarPestana(pestana: String) {
         vistaActual = pestana
         val esLista = pestana == "lista"
-        seccionLista.visibility = if (esLista) View.VISIBLE else View.GONE
-        seccionMapa.visibility = if (esLista) View.GONE else View.VISIBLE
+        binding.seccionLista.visibility = if (esLista) View.VISIBLE else View.GONE
+        binding.seccionMapa.visibility = if (esLista) View.GONE else View.VISIBLE
 
-        tabBtnLista.isSelected = esLista
-        tabBtnLista.backgroundTintList = ContextCompat.getColorStateList(
-            this, if (esLista) R.color.simona_azul_suave else R.color.simona_card_bg
+        // PLAN_MEJORAS_VISUAL_2.md, punto 14: la pestaña inactiva usaba
+        // simona_card_bg (blanco, IGUAL al fondo del propio contenedor
+        // tabsContainer que también es bg_chip_resumen/simona_card_bg),
+        // así que en la práctica solo se distinguía por el borde de 1dp —
+        // contraste muy sutil. Se cambió a simona_superficie (el fondo
+        // general de la pantalla, distinto de ambos: del contenedor
+        // blanco y de la pestaña activa celeste), sin tocar el color de
+        // la pestaña activa.
+        binding.tabBtnLista.isSelected = esLista
+        binding.tabBtnLista.backgroundTintList = ContextCompat.getColorStateList(
+            this, if (esLista) R.color.simona_azul_suave else R.color.simona_superficie
         )
-        tabBtnLista.setTextColor(
+        binding.tabBtnLista.setTextColor(
             ContextCompat.getColor(this, if (esLista) R.color.simona_azul else R.color.simona_tinta_suave)
         )
 
-        tabBtnMapa.isSelected = !esLista
-        tabBtnMapa.backgroundTintList = ContextCompat.getColorStateList(
-            this, if (!esLista) R.color.simona_azul_suave else R.color.simona_card_bg
+        binding.tabBtnMapa.isSelected = !esLista
+        binding.tabBtnMapa.backgroundTintList = ContextCompat.getColorStateList(
+            this, if (!esLista) R.color.simona_azul_suave else R.color.simona_superficie
         )
-        tabBtnMapa.setTextColor(
+        binding.tabBtnMapa.setTextColor(
             ContextCompat.getColor(this, if (!esLista) R.color.simona_azul else R.color.simona_tinta_suave)
         )
 
@@ -169,13 +261,27 @@ class MapaHuertasActivity : AppCompatActivity() {
         val huertas = repository.listar()
         val hayHuertas = huertas.isNotEmpty()
 
-        estadoVacio.visibility = if (hayHuertas) View.GONE else View.VISIBLE
-        resumenChipsContainer.visibility = if (hayHuertas) View.VISIBLE else View.GONE
-        tabsContainer.visibility = if (hayHuertas) View.VISIBLE else View.GONE
-        seccionLista.visibility = if (hayHuertas && vistaActual == "lista") View.VISIBLE else View.GONE
-        seccionMapa.visibility = if (hayHuertas && vistaActual == "mapa") View.VISIBLE else View.GONE
+        // PLAN_MEJORAS_UX_20.md, punto 20: antes el paso de "vacío" a "con
+        // huertas" (y viceversa, ej. al eliminar la última) cambiaba de
+        // golpe; un Fade corto lo suaviza. Solo se dispara cuando ESE
+        // estado puntual cambia (no en cada refresh/filtro), para no pisar
+        // las animaciones propias del DiffUtil del RecyclerView.
+        val estabaVacio = binding.estadoVacio.visibility == View.VISIBLE
+        val estadoVacioCambio = estabaVacio == hayHuertas
+        if (estadoVacioCambio) {
+            TransitionManager.beginDelayedTransition(binding.contenidoHome, Fade().setDuration(180))
+        }
 
-        if (!hayHuertas) return
+        binding.estadoVacio.visibility = if (hayHuertas) View.GONE else View.VISIBLE
+        binding.resumenChipsContainer.visibility = if (hayHuertas) View.VISIBLE else View.GONE
+        binding.tabsContainer.visibility = if (hayHuertas) View.VISIBLE else View.GONE
+        binding.seccionLista.visibility = if (hayHuertas && vistaActual == "lista") View.VISIBLE else View.GONE
+        binding.seccionMapa.visibility = if (hayHuertas && vistaActual == "mapa") View.VISIBLE else View.GONE
+
+        if (!hayHuertas) {
+            adapter.submitList(emptyList())
+            return
+        }
 
         val total = huertas.size
         val conSed = huertas.count { h ->
@@ -184,195 +290,81 @@ class MapaHuertasActivity : AppCompatActivity() {
         }
         val optimas = total - conSed
 
-        tvChipTotal.text = total.toString()
-        tvChipConSed.text = conSed.toString()
-        tvChipConSed.setTextColor(
+        // PLAN_MEJORAS_VISUAL_2.md, punto 3: tip visible solo con 1-2
+        // huertas en TOTAL (sin filtrar) — si se basara en la lista
+        // filtrada, aparecería/desaparecería de forma confusa al tocar
+        // los chips de "Con sed"/"Óptimas".
+        binding.tvTipPocasHuertas.visibility = if (total in 1..2) View.VISIBLE else View.GONE
+
+        binding.tvChipTotal.text = total.toString()
+        binding.tvChipConSed.text = conSed.toString()
+        binding.tvChipConSed.setTextColor(
             ContextCompat.getColor(this, if (conSed > 0) R.color.simona_rojo else R.color.simona_tinta_suave)
         )
-        tvChipOptimas.text = optimas.toString()
-        tvContadorHuertas.text = if (total == 1) {
-            getString(R.string.home_contador_una)
-        } else {
-            getString(R.string.home_contador_varias, total)
+        binding.tvChipOptimas.text = optimas.toString()
+
+        // PLAN_MEJORAS_UX_20.md, punto 16: la lista (RecyclerView y contador)
+        // respeta el filtro activo; el croquis/mapa sigue mostrando todas
+        // las huertas (filtrar pines no forma parte de este punto).
+        val huertasFiltradas = when (filtroActual) {
+            FiltroHuertas.CON_SED -> huertas.filter { h ->
+                val l = h.ultimaLectura
+                l != null && l.humedad <= h.humedadMin
+            }
+            FiltroHuertas.OPTIMAS -> huertas.filter { h ->
+                val l = h.ultimaLectura
+                l == null || l.humedad > h.humedadMin
+            }
+            null -> huertas
         }
 
-        renderizarTarjetas(huertas)
+        binding.tvContadorHuertas.text = if (huertasFiltradas.size == 1) {
+            getString(R.string.home_contador_una)
+        } else {
+            getString(R.string.home_contador_varias, huertasFiltradas.size)
+        }
+
+        actualizarEstiloChips()
+        adapter.submitList(huertasFiltradas)
         renderizarPines(huertas)
     }
 
-    private fun renderizarTarjetas(huertas: List<Huerta>) {
-        listaHeatmapsContainer.removeAllViews()
+    /** PLAN_MEJORAS_UX_20.md, punto 16: click en un chip de resumen filtra
+     * la lista; tocar el mismo chip que ya está activo lo desactiva. */
+    private fun aplicarFiltro(filtro: FiltroHuertas?) {
+        filtroActual = if (filtroActual == filtro) null else filtro
+        cargarDatos()
+    }
 
-        val colorTinta = ContextCompat.getColor(this, R.color.simona_tinta)
-        val colorSuave = ContextCompat.getColor(this, R.color.simona_tinta_suave)
-        val colorAzul = ContextCompat.getColor(this, R.color.simona_azul)
-        val colorRojo = ContextCompat.getColor(this, R.color.simona_rojo)
-        val colorVerde = ContextCompat.getColor(this, R.color.simona_verde)
-        val colorMarron = ContextCompat.getColor(this, R.color.simona_marron)
-
-        huertas.forEach { huerta ->
-            val l = huerta.ultimaLectura
-            val colorFranja = when {
-                l == null -> colorMarron
-                l.humedad <= huerta.humedadMin -> colorRojo
-                l.humedad >= huerta.humedadMax -> colorAzul
-                else -> colorVerde
-            }
-
-            // El wrapper lleva el fondo/borde de la tarjeta, el click y la
-            // franja de color; `card` (más abajo) solo aporta el padding y
-            // el contenido, para que la franja llegue hasta los bordes.
-            val wrapper = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                background = ContextCompat.getDrawable(this@MapaHuertasActivity, R.drawable.bg_card_huerta)
-                foreground = obtenerRippleTematico()
-                clipToOutline = true
-                val lp = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                lp.bottomMargin = 10.dpToPx()
-                layoutParams = lp
-                isClickable = true
-                isFocusable = true
-                setOnClickListener { abrirDashboardHuerta(huerta) }
-                setOnLongClickListener {
-                    mostrarOpcionesHuerta(huerta)
-                    true
-                }
-            }
-
-            wrapper.addView(View(this).apply {
-                layoutParams = LinearLayout.LayoutParams(4.dpToPx(), LinearLayout.LayoutParams.MATCH_PARENT)
-                setBackgroundColor(colorFranja)
-            })
-
-            val card = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                setPadding(16.dpToPx(), 14.dpToPx(), 16.dpToPx(), 14.dpToPx())
-                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-            }
-
-            val filaTop = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                gravity = Gravity.CENTER_VERTICAL
-            }
-
-            val colInfo = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-            }
-
-            colInfo.addView(TextView(this).apply {
-                text = huerta.nombre
-                textSize = 16f
-                setTextColor(colorTinta)
-                setTypeface(null, android.graphics.Typeface.BOLD)
-            })
-
-            colInfo.addView(TextView(this).apply {
-                text = getString(
-                    R.string.home_rango_ideal,
-                    huerta.categoria,
-                    huerta.humedadMin.toInt(),
-                    huerta.humedadMax.toInt()
-                )
-                textSize = 12f
-                setTextColor(colorSuave)
-                setPadding(0, 3.dpToPx(), 0, 0)
-            })
-            filaTop.addView(colInfo)
-
-            filaTop.addView(ImageView(this).apply {
-                setImageResource(R.drawable.ic_more_vert)
-                layoutParams = LinearLayout.LayoutParams(32.dpToPx(), 32.dpToPx())
-                setPadding(4.dpToPx(), 4.dpToPx(), 4.dpToPx(), 4.dpToPx())
-                imageTintList = ContextCompat.getColorStateList(this@MapaHuertasActivity, R.color.simona_tinta_suave)
-                foreground = obtenerRippleTematico()
-                isClickable = true
-                isFocusable = true
-                contentDescription = getString(R.string.opciones_huerta_cd, huerta.nombre)
-                setOnClickListener { mostrarOpcionesHuerta(huerta) }
-            })
-
-            filaTop.addView(ImageView(this).apply {
-                setImageResource(R.drawable.ic_chevron_right)
-                layoutParams = LinearLayout.LayoutParams(24.dpToPx(), 24.dpToPx())
-                imageTintList = ContextCompat.getColorStateList(this@MapaHuertasActivity, R.color.simona_azul)
-            })
-
-            card.addView(filaTop)
-
-            val filaEstado = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                gravity = Gravity.CENTER_VERTICAL
-                setPadding(0, 10.dpToPx(), 0, 0)
-            }
-
-            if (l != null) {
-                val esSeco = l.humedad <= huerta.humedadMin
-                val esHumedo = l.humedad >= huerta.humedadMax
-                val colorEstado = when {
-                    esSeco -> colorRojo
-                    esHumedo -> colorAzul
-                    else -> colorVerde
-                }
-                val textoEstado = getString(
-                    when {
-                        esSeco -> R.string.home_estado_seco
-                        esHumedo -> R.string.home_estado_humedo
-                        else -> R.string.home_estado_optimo
-                    }
-                )
-
-                filaEstado.addView(ImageView(this).apply {
-                    setImageResource(R.drawable.ic_gota_full)
-                    layoutParams = LinearLayout.LayoutParams(16.dpToPx(), 16.dpToPx()).apply {
-                        marginEnd = 6.dpToPx()
-                    }
-                    imageTintList = android.content.res.ColorStateList.valueOf(colorEstado)
-                })
-
-                filaEstado.addView(TextView(this).apply {
-                    layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-                    text = getString(R.string.home_humedad_estado, l.humedad.toInt(), textoEstado)
-                    textSize = 12f
-                    setTextColor(colorEstado)
-                    setTypeface(null, android.graphics.Typeface.BOLD)
-                    setPadding(2.dpToPx(), 4.dpToPx(), 2.dpToPx(), 4.dpToPx())
-                    foreground = obtenerRippleTematico()
-                    isClickable = true
-                    isFocusable = true
-                    setOnClickListener {
-                        startActivity(DetalleHuertaActivity.crearIntent(this@MapaHuertasActivity, huerta.id))
-                    }
-                })
-            } else {
-                filaEstado.addView(ImageView(this).apply {
-                    setImageResource(R.drawable.ic_brote)
-                    layoutParams = LinearLayout.LayoutParams(16.dpToPx(), 16.dpToPx()).apply {
-                        marginEnd = 6.dpToPx()
-                    }
-                })
-                filaEstado.addView(TextView(this).apply {
-                    text = getString(R.string.home_sin_lecturas)
-                    textSize = 12f
-                    setTextColor(colorMarron)
-                })
-            }
-            card.addView(filaEstado)
-
-            wrapper.addView(card)
-            listaHeatmapsContainer.addView(wrapper)
-        }
+    private fun actualizarEstiloChips() {
+        binding.chipTotal.setBackgroundResource(
+            if (filtroActual == null) R.drawable.bg_chip_resumen_seleccionado else R.drawable.bg_chip_resumen
+        )
+        binding.chipConSed.setBackgroundResource(
+            if (filtroActual == FiltroHuertas.CON_SED) R.drawable.bg_chip_resumen_seleccionado else R.drawable.bg_chip_resumen
+        )
+        binding.chipOptimas.setBackgroundResource(
+            if (filtroActual == FiltroHuertas.OPTIMAS) R.drawable.bg_chip_resumen_seleccionado else R.drawable.bg_chip_resumen
+        )
     }
 
     private fun renderizarPines(huertas: List<Huerta>) {
-        mapaContainer.removeAllViews()
+        // PLAN_MEJORAS_VISUAL_2.md, punto 9: si hay huertas sin posición
+        // asignada (posicionMapaX/Y null), avisar específicamente en vez
+        // de dejar el hint genérico — esas huertas no van a tener pin en
+        // el croquis y sin este aviso no hay ninguna pista de que existen.
+        val sinUbicar = huertas.count { it.posicionMapaX == null || it.posicionMapaY == null }
+        binding.tvMapaHint.text = when {
+            sinUbicar == 1 -> getString(R.string.home_mapa_hint_sin_ubicar_una)
+            sinUbicar > 1 -> getString(R.string.home_mapa_hint_sin_ubicar_varias, sinUbicar)
+            else -> getString(R.string.home_mapa_hint)
+        }
 
-        mapaContainer.post {
-            val ancho = mapaContainer.width.toFloat()
-            val alto = mapaContainer.height.toFloat()
+        binding.mapaContainer.removeAllViews()
+
+        binding.mapaContainer.post {
+            val ancho = binding.mapaContainer.width.toFloat()
+            val alto = binding.mapaContainer.height.toFloat()
             if (ancho <= 0 || alto <= 0) return@post
 
             huertas.forEach { huerta ->
@@ -395,25 +387,28 @@ class MapaHuertasActivity : AppCompatActivity() {
                         val foto = ImageView(this@MapaHuertasActivity).apply {
                             layoutParams = FrameLayout.LayoutParams(60.dpToPx(), 42.dpToPx())
                             scaleType = ImageView.ScaleType.CENTER_CROP
+                            // PLAN_MEJORAS_20.md, punto 19: decorativo, el
+                            // label de texto al lado del pin ya dice el nombre.
+                            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
                         }
                         FotoHuertaUtil.aplicarConEsquinasRedondeadas(this@MapaHuertasActivity, foto, bitmapFoto)
                         addView(foto)
 
                         val borde = View(this@MapaHuertasActivity).apply {
                             layoutParams = FrameLayout.LayoutParams(60.dpToPx(), 42.dpToPx())
-                            background = androidx.core.content.ContextCompat.getDrawable(this@MapaHuertasActivity, R.drawable.bg_bancal)
+                            background = ContextCompat.getDrawable(this@MapaHuertasActivity, R.drawable.bg_bancal)
                         }
                         addView(borde)
                     }
                 } else {
                     View(this).apply {
                         layoutParams = FrameLayout.LayoutParams(60.dpToPx(), 42.dpToPx())
-                        background = androidx.core.content.ContextCompat.getDrawable(this@MapaHuertasActivity, R.drawable.bg_bancal)
+                        background = ContextCompat.getDrawable(this@MapaHuertasActivity, R.drawable.bg_bancal)
                         translationX = (x * ancho) - 30.dpToPx()
                         translationY = (y * alto) - 21.dpToPx()
                     }
                 }
-                mapaContainer.addView(bancal)
+                binding.mapaContainer.addView(bancal)
 
                 val pinContainer = LinearLayout(this).apply {
                     orientation = LinearLayout.VERTICAL
@@ -426,6 +421,9 @@ class MapaHuertasActivity : AppCompatActivity() {
                     val pinIcon = ImageView(this@MapaHuertasActivity).apply {
                         layoutParams = LinearLayout.LayoutParams(22.dpToPx(), 22.dpToPx())
                         setImageResource(R.drawable.marker_huerta)
+                        // PLAN_MEJORAS_20.md, punto 19: decorativo, el label
+                        // de texto justo debajo (huerta.nombre) ya lo describe.
+                        importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
                     }
                     addView(pinIcon)
 
@@ -449,7 +447,7 @@ class MapaHuertasActivity : AppCompatActivity() {
                         true
                     }
                 }
-                mapaContainer.addView(pinContainer)
+                binding.mapaContainer.addView(pinContainer)
             }
         }
     }
@@ -461,7 +459,7 @@ class MapaHuertasActivity : AppCompatActivity() {
             getString(R.string.opcion_eliminar)
         )
 
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.opciones_huerta_titulo, huerta.nombre))
             .setItems(opciones) { _, which ->
                 when (which) {
@@ -474,7 +472,7 @@ class MapaHuertasActivity : AppCompatActivity() {
     }
 
     private fun mostrarDialogoEliminar(huerta: Huerta) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle(R.string.eliminar_huerta_titulo)
             .setMessage(getString(R.string.eliminar_huerta_mensaje, huerta.nombre))
             .setPositiveButton(R.string.btn_eliminar) { _, _ ->
@@ -487,293 +485,22 @@ class MapaHuertasActivity : AppCompatActivity() {
     }
 
     private fun mostrarDialogoEditar(huerta: Huerta) {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_editar_huerta, null)
-        val tvTitulo = dialogView.findViewById<TextView>(R.id.tvEditarTitulo)
-        val etNombre = dialogView.findViewById<EditText>(R.id.etEditarNombre)
-        val tvErrorNombre = dialogView.findViewById<TextView>(R.id.tvErrorEditarNombre)
-        val etPassword = dialogView.findViewById<EditText>(R.id.etEditarPassword)
-        val tvErrorPassword = dialogView.findViewById<TextView>(R.id.tvErrorEditarPassword)
-
-        val ivFotoPreview = dialogView.findViewById<ImageView>(R.id.ivEditarFotoPreview)
-        val btnElegirFoto = dialogView.findViewById<MaterialButton>(R.id.btnEditarElegirFoto)
-        val btnQuitarFoto = dialogView.findViewById<MaterialButton>(R.id.btnEditarQuitarFoto)
-
-        val etHumedadMin = dialogView.findViewById<EditText>(R.id.etEditarHumedadMin)
-        val etHumedadMax = dialogView.findViewById<EditText>(R.id.etEditarHumedadMax)
-        val sliderHumedad = dialogView.findViewById<RangeSlider>(R.id.sliderEditarHumedad)
-        val tvHumedadAviso = dialogView.findViewById<TextView>(R.id.tvEditarHumedadAviso)
-
-        val etPhMin = dialogView.findViewById<EditText>(R.id.etEditarPhMin)
-        val etPhMax = dialogView.findViewById<EditText>(R.id.etEditarPhMax)
-        val sliderPh = dialogView.findViewById<RangeSlider>(R.id.sliderEditarPh)
-
-        val etLuzMin = dialogView.findViewById<EditText>(R.id.etEditarLuzMin)
-        val etLuzMax = dialogView.findViewById<EditText>(R.id.etEditarLuzMax)
-        val sliderLuz = dialogView.findViewById<RangeSlider>(R.id.sliderEditarLuz)
-
-        val etTempMin = dialogView.findViewById<EditText>(R.id.etEditarTempMin)
-        val etTempMax = dialogView.findViewById<EditText>(R.id.etEditarTempMax)
-        val sliderTemp = dialogView.findViewById<RangeSlider>(R.id.sliderEditarTemp)
-
-        val btnCancelar = dialogView.findViewById<Button>(R.id.btnEditarCancelar)
-        val btnGuardar = dialogView.findViewById<Button>(R.id.btnEditarGuardar)
-
-        tvTitulo.text = getString(R.string.editar_huerta_titulo, huerta.nombre)
-        etNombre.setText(huerta.nombre)
-        etPassword.setText(huerta.passwordRed)
-
-        // Fase 6.4: precargar la foto ya guardada (si tiene) y dejar que
-        // el picker registrado a nivel Activity sepa a qué ImageView/botón
-        // de ESTE diálogo volcar el resultado.
-        fotoUriEnEdicion = huerta.fotoUri?.let { Uri.parse(it) }
-        ivFotoEnEdicion = ivFotoPreview
-        btnQuitarFotoEnEdicion = btnQuitarFoto
-        if (fotoUriEnEdicion != null) {
-            mostrarPreviewFotoEditar(fotoUriEnEdicion!!)
-            btnElegirFoto.setText(R.string.btn_cambiar_foto)
-        } else {
-            ivFotoPreview.visibility = View.GONE
-            btnQuitarFoto.visibility = View.GONE
-            btnElegirFoto.setText(R.string.btn_elegir_foto)
-        }
-        btnElegirFoto.setOnClickListener {
-            seleccionarFotoEditar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-        btnQuitarFoto.setOnClickListener {
-            fotoUriEnEdicion = null
-            ivFotoPreview.setImageDrawable(null)
-            ivFotoPreview.visibility = View.GONE
-            btnQuitarFoto.visibility = View.GONE
-            btnElegirFoto.setText(R.string.btn_elegir_foto)
-        }
-
-        configurarEditorRango(sliderHumedad, etHumedadMin, etHumedadMax, huerta.humedadMin, huerta.humedadMax, 0, tvHumedadAviso)
-        configurarEditorRango(sliderPh, etPhMin, etPhMax, huerta.phMin, huerta.phMax, 1)
-        configurarEditorRango(sliderLuz, etLuzMin, etLuzMax, huerta.luzMin.toFloat(), huerta.luzMax.toFloat(), 0)
-        configurarEditorRango(sliderTemp, etTempMin, etTempMax, huerta.tempMin, huerta.tempMax, 1)
-
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .setCancelable(true)
-            .create()
-
-        btnCancelar.setOnClickListener { dialog.dismiss() }
-
-        btnGuardar.setOnClickListener {
-            val nuevoNombre = etNombre.text?.toString()?.trim().orEmpty()
-            val nuevoPassword = etPassword.text?.toString().orEmpty()
-
-            var valido = true
-            if (nuevoNombre.isEmpty()) {
-                tvErrorNombre.visibility = View.VISIBLE
-                valido = false
-            } else {
-                tvErrorNombre.visibility = View.GONE
-            }
-
-            if (nuevoPassword.length < 8) {
-                tvErrorPassword.visibility = View.VISIBLE
-                valido = false
-            } else {
-                tvErrorPassword.visibility = View.GONE
-            }
-
-            val valHumedad = sliderHumedad.values
-            if (valHumedad[1] - valHumedad[0] < 10f) {
-                tvHumedadAviso.visibility = View.VISIBLE
-                valido = false
-            }
-
-            if (!valido) return@setOnClickListener
-
-            val valPh = sliderPh.values
-            val valLuz = sliderLuz.values
-            val valTemp = sliderTemp.values
-
-            val huertaActualizada = huerta.copy(
-                nombre = nuevoNombre,
-                passwordRed = nuevoPassword,
-                humedadMin = valHumedad[0],
-                humedadMax = valHumedad[1],
-                phMin = valPh[0],
-                phMax = valPh[1],
-                luzMin = valLuz[0].toInt(),
-                luzMax = valLuz[1].toInt(),
-                tempMin = valTemp[0],
-                tempMax = valTemp[1],
-                fotoUri = fotoUriEnEdicion?.toString()
-            )
-
-            repository.guardar(huertaActualizada)
-            Toast.makeText(this, R.string.huerta_actualizada, Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
-            cargarDatos()
-        }
-
-        dialog.setOnDismissListener { limpiarReferenciasFotoEdicion() }
-        dialog.show()
-    }
-
-    private fun limpiarReferenciasFotoEdicion() {
-        ivFotoEnEdicion = null
-        btnQuitarFotoEnEdicion = null
-    }
-
-    private fun mostrarPreviewFotoEditar(uri: Uri) {
-        val iv = ivFotoEnEdicion ?: return
-        val destinoPx = 56.dpToPx()
-        val bitmap = FotoHuertaUtil.decodificarSampleado(this, uri, destinoPx, destinoPx)
-        if (bitmap == null) {
-            fotoUriEnEdicion = null
-            return
-        }
-        FotoHuertaUtil.aplicarConEsquinasRedondeadas(this, iv, bitmap)
-        iv.visibility = View.VISIBLE
-        btnQuitarFotoEnEdicion?.visibility = View.VISIBLE
-    }
-
-    private fun configurarEditorRango(
-        slider: RangeSlider,
-        etMin: EditText,
-        etMax: EditText,
-        valorMin: Float,
-        valorMax: Float,
-        decimales: Int,
-        tvAvisoHumedad: TextView? = null
-    ) {
-        var sinc = false
-
-        slider.values = listOf(valorMin, valorMax)
-        etMin.setText(formatearValor(valorMin, decimales))
-        etMax.setText(formatearValor(valorMax, decimales))
-
-        slider.addOnChangeListener { s, _, fromUser ->
-            if (fromUser && !sinc) {
-                if (tvAvisoHumedad != null) {
-                    val vals = s.values
-                    val ancho = vals[1] - vals[0]
-                    if (ancho < 10f) {
-                        tvAvisoHumedad.visibility = View.VISIBLE
-                        val nuevoMax = (vals[0] + 10f).coerceAtMost(s.valueTo)
-                        val nuevoMin = if (nuevoMax - vals[0] < 10f) {
-                            (nuevoMax - 10f).coerceAtLeast(s.valueFrom)
-                        } else {
-                            vals[0]
-                        }
-                        sinc = true
-                        s.values = listOf(nuevoMin, nuevoMax)
-                        sinc = false
-                    } else {
-                        tvAvisoHumedad.visibility = View.GONE
-                    }
-                }
-                sinc = true
-                etMin.setText(formatearValor(s.values[0], decimales))
-                etMax.setText(formatearValor(s.values[1], decimales))
-                sinc = false
-            }
-        }
-
-        fun crearWatcher(esMin: Boolean): TextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (sinc) return
-                val txt = s?.toString()?.replace(',', '.') ?: return
-                val v = txt.toFloatOrNull() ?: return
-                val actuales = slider.values
-                val nMin = if (esMin) v else actuales[0]
-                val nMax = if (esMin) actuales[1] else v
-                if (nMin < slider.valueFrom || nMax > slider.valueTo || nMin >= nMax) return
-
-                sinc = true
-                slider.values = listOf(nMin, nMax)
-                sinc = false
-
-                if (tvAvisoHumedad != null) {
-                    tvAvisoHumedad.visibility = if (nMax - nMin < 10f) View.VISIBLE else View.GONE
-                }
-            }
-        }
-
-        etMin.addTextChangedListener(crearWatcher(true))
-        etMax.addTextChangedListener(crearWatcher(false))
-    }
-
-    private fun formatearValor(v: Float, decimales: Int): String =
-        if (decimales == 0) v.toInt().toString() else String.format(java.util.Locale.US, "%.${decimales}f", v)
-
-    private fun abrirChatAi() {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_chat_ai, null)
-        val tvHistorial = dialogView.findViewById<TextView>(R.id.tvHistorialChat)
-        val etPregunta = dialogView.findViewById<EditText>(R.id.etPreguntaChat)
-        val btnEnviar = dialogView.findViewById<Button>(R.id.btnEnviarChat)
-        val progressBar = dialogView.findViewById<ProgressBar>(R.id.progressBarChat)
-        val scrollChat = dialogView.findViewById<ScrollView>(R.id.scrollChat)
-
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .setCancelable(true)
-            .create()
-
-        val huertas = repository.listar()
-        val contexto = if (huertas.isNotEmpty()) {
-            buildString {
-                append("El usuario está en el menú principal de SIMONA. Tiene ${huertas.size} huertas registradas: ")
-                huertas.forEachIndexed { i, h ->
-                    append("${i + 1}) ${h.nombre} (Cultivo: ${h.categoria}, humedad óptima: ${h.humedadMin.toInt()}%-${h.humedadMax.toInt()}%). ")
-                    val l = h.ultimaLectura
-                    if (l != null) {
-                        append("Última lectura: humedad ${l.humedad}%, temp ${l.temperatura}°C, riego ${if (l.riegoActivo) "activo" else "inactivo"}. ")
-                    }
-                }
-            }
-        } else {
-            "El usuario está en el menú principal de SIMONA. Aún no tiene huertas registradas."
-        }
-
-        btnEnviar.setOnClickListener {
-            val pregunta = etPregunta.text.toString().trim()
-            if (pregunta.isEmpty()) return@setOnClickListener
-
-            val textoAnterior = tvHistorial.text.toString()
-            val etiquetaTu = getString(R.string.asistente_tu)
-            val etiquetaSimona = getString(R.string.asistente_simona)
-            tvHistorial.text = "$textoAnterior\n\n$etiquetaTu: $pregunta\n\n${getString(R.string.asistente_pensando)}"
-            etPregunta.setText("")
-            progressBar.visibility = View.VISIBLE
-            btnEnviar.isEnabled = false
-            scrollChat.post { scrollChat.fullScroll(View.FOCUS_DOWN) }
-
-            AsistenteGemini(this).preguntar(
-                pregunta = pregunta,
-                contextoHuerta = contexto,
-                onExito = { respuesta ->
-                    progressBar.visibility = View.GONE
-                    btnEnviar.isEnabled = true
-                    tvHistorial.text = "$textoAnterior\n\n$etiquetaTu: $pregunta\n\n$etiquetaSimona: $respuesta"
-                    scrollChat.post { scrollChat.fullScroll(View.FOCUS_DOWN) }
-                },
-                onError = { error ->
-                    progressBar.visibility = View.GONE
-                    btnEnviar.isEnabled = true
-                    tvHistorial.text = "$textoAnterior\n\n$etiquetaTu: $pregunta\n\n${getString(R.string.asistente_error_prefijo)}: $error"
-                    scrollChat.post { scrollChat.fullScroll(View.FOCUS_DOWN) }
-                }
-            )
-        }
-
-        dialog.show()
+        val dialogo = DialogoEditarHuerta(
+            activity = this,
+            huerta = huerta,
+            repository = repository,
+            lanzarSelectorFoto = {
+                seleccionarFotoEditar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            },
+            onGuardado = { cargarDatos() },
+            onDismiss = { dialogoEditarActual = null }
+        )
+        dialogoEditarActual = dialogo
+        dialogo.mostrar()
     }
 
     private fun updateThemeIcon(dark: Boolean) {
-        val btn = findViewById<ImageView?>(R.id.btnThemeToggle)
-        btn ?: return
-        if (dark) {
-            btn.setImageResource(R.drawable.ic_luna)
-        } else {
-            btn.setImageResource(R.drawable.ic_sol)
-        }
+        binding.btnThemeToggle.setImageResource(if (dark) R.drawable.ic_luna else R.drawable.ic_sol)
     }
 
     private fun abrirDashboardHuerta(huerta: Huerta) {
@@ -781,16 +508,4 @@ class MapaHuertasActivity : AppCompatActivity() {
     }
 
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
-
-    /**
-     * Resuelve ?attr/selectableItemBackground (ripple temático estándar de
-     * Material) para usarlo como foreground de views armadas a mano por
-     * código, como las cards de huerta de renderizarTarjetas(), que no
-     * tenían ningún feedback táctil al tocarlas.
-     */
-    private fun obtenerRippleTematico(): Drawable? {
-        val valor = TypedValue()
-        theme.resolveAttribute(android.R.attr.selectableItemBackground, valor, true)
-        return ContextCompat.getDrawable(this, valor.resourceId)
-    }
 }

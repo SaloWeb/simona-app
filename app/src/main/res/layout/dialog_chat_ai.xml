@@ -6,7 +6,7 @@
     android:animateLayoutChanges="true"
     android:background="@color/simona_card_bg"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="@dimen/simona_space_lg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,6 +22,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_asistente_simona" />
         </FrameLayout>
 
@@ -37,13 +38,21 @@
 
     </LinearLayout>
 
+    <!-- PLAN_MEJORAS_VISUAL_2.md, punto 4: antes esta caja tenía una altura
+         fija de 200dp, pensada para una conversación larga — con el
+         mensaje de bienvenida solo (3 líneas) quedaban ~150px vacíos
+         abajo (confirmado en captura real). Ahora arranca en wrap_content
+         (se ajusta al contenido real) y DialogoChatAi.kt le pone un tope
+         dinámico de altura la primera vez que el contenido lo supera, para
+         que una conversación larga siga scrolleando en vez de estirar el
+         diálogo fuera de la pantalla. -->
     <ScrollView
         android:id="@+id/scrollChat"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:background="@drawable/bg_chip_resumen"
-        android:padding="12dp">
+        android:padding="@dimen/simona_space_sm">
 
         <TextView
             android:id="@+id/tvHistorialChat"
@@ -61,14 +70,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/simona_space_xs"
         android:indeterminateTint="@color/simona_verde_claro"
         android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/simona_space_sm"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -80,8 +89,8 @@
             android:background="@drawable/bg_card_huerta"
             android:hint="@string/asistente_hint"
             android:inputType="textCapSentences"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
+            android:paddingStart="@dimen/simona_space_sm"
+            android:paddingEnd="@dimen/simona_space_sm"
             android:textColor="@color/simona_tinta"
             android:textColorHint="@color/simona_tinta_suave"
             android:textSize="13sp" />
@@ -90,7 +99,7 @@
             android:id="@+id/btnEnviarChat"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/simona_space_xs"
             android:backgroundTint="@color/simona_verde_claro"
             android:contentDescription="@string/enviar"
             android:insetTop="0dp"
