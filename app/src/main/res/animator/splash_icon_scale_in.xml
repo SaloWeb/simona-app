@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- PLAN_MEJORAS_UX_20.md, punto 18: animacion de entrada del logo del
+     splash (scale-in suave, sin rebote — se prefirio decelerate sobre
+     overshoot para que quede prolijo/serio, acorde al resto de la
+     identidad de la app, en vez de un efecto "playful" de más).
+     Va en res/animator/ (no res/anim/) porque son ObjectAnimator de
+     propiedad, no Animation del sistema viejo. -->
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:valueFrom="0.7"
+        android:valueTo="1.0"
+        android:valueType="floatType"
+        android:duration="650"
+        android:interpolator="@android:interpolator/decelerate_cubic" />
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:valueFrom="0.7"
+        android:valueTo="1.0"
+        android:valueType="floatType"
+        android:duration="650"
+        android:interpolator="@android:interpolator/decelerate_cubic" />
+</set>

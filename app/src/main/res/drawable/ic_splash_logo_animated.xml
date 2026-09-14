@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- PLAN_MEJORAS_UX_20.md, punto 18: AnimatedVectorDrawable del ícono
+     de splash. Usa como capa base ic_splash_logo_vector.xml (logo
+     vectorizado desde el PNG con vtracer) y anima el grupo
+     "logo_group" (scale-in, ver res/animator/splash_icon_scale_in.xml)
+     al mostrarse. En API <31 la Splash Screen API no anima el ícono
+     (limitación de la plataforma, no de este archivo) pero sigue
+     mostrando el primer frame estático sin problema, porque
+     AnimatedVectorDrawable es un Drawable válido en cualquier API
+     soportada por el proyecto. -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_splash_logo_vector">
+    <target
+        android:name="logo_group"
+        android:animation="@animator/splash_icon_scale_in" />
+</animated-vector>
