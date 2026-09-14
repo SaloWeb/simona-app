@@ -71,9 +71,33 @@ class AjustarRangosActivity : AppCompatActivity() {
             if (fromUser) aplicarAnchoMinimoHumedad(slider)
         }
 
+        // PLAN_MEJORAS_VISUAL_2.md, punto 2: resumen en modo lectura de los
+        // 4 rangos sugeridos, visible en el estado inicial (antes de
+        // "Ajustar manualmente").
+        poblarResumenRangos()
+
         binding.btnUsarRecomendados.setOnClickListener { confirmarRangos() }
         binding.btnContinuar.setOnClickListener { confirmarRangos() }
         binding.linkAjustarManualmente.setOnClickListener { mostrarSlidersManualmente() }
+    }
+
+    private fun poblarResumenRangos() {
+        binding.tvResumenHumedad.text = getString(
+            R.string.resumen_rango_valor,
+            formatearValor(perfil.humedadMin, 0), formatearValor(perfil.humedadMax, 0), "%"
+        )
+        binding.tvResumenPh.text = getString(
+            R.string.resumen_rango_valor,
+            formatearValor(perfil.phMin, 1), formatearValor(perfil.phMax, 1), ""
+        )
+        binding.tvResumenLuz.text = getString(
+            R.string.resumen_rango_valor,
+            formatearValor(perfil.luzMin.toFloat(), 0), formatearValor(perfil.luzMax.toFloat(), 0), " lux"
+        )
+        binding.tvResumenTemp.text = getString(
+            R.string.resumen_rango_valor,
+            formatearValor(perfil.tempMin, 1), formatearValor(perfil.tempMax, 1), "°C"
+        )
     }
 
     /**
@@ -142,15 +166,15 @@ class AjustarRangosActivity : AppCompatActivity() {
         val max = valores[1]
         val ancho = max - min
 
-        if (ancho >= ANCHO_MINIMO_HUMEDAD) {
+        if (ancho >= ValidacionesHuerta.ANCHO_MINIMO_HUMEDAD) {
             binding.tvHumedadAviso.visibility = View.GONE
             return
         }
 
         binding.tvHumedadAviso.visibility = View.VISIBLE
-        val nuevoMax = (min + ANCHO_MINIMO_HUMEDAD).coerceAtMost(slider.valueTo)
-        val nuevoMin = if (nuevoMax - min < ANCHO_MINIMO_HUMEDAD) {
-            (nuevoMax - ANCHO_MINIMO_HUMEDAD).coerceAtLeast(slider.valueFrom)
+        val nuevoMax = (min + ValidacionesHuerta.ANCHO_MINIMO_HUMEDAD).coerceAtMost(slider.valueTo)
+        val nuevoMin = if (nuevoMax - min < ValidacionesHuerta.ANCHO_MINIMO_HUMEDAD) {
+            (nuevoMax - ValidacionesHuerta.ANCHO_MINIMO_HUMEDAD).coerceAtLeast(slider.valueFrom)
         } else {
             min
         }
@@ -166,6 +190,10 @@ class AjustarRangosActivity : AppCompatActivity() {
         binding.linkAjustarManualmente.visibility = View.GONE
         binding.btnUsarRecomendados.visibility = View.GONE
         binding.btnContinuar.visibility = View.VISIBLE
+        // PLAN_MEJORAS_VISUAL_2.md, punto 2: el resumen de lectura pasa a
+        // redundante una vez que los sliders (editables) muestran los
+        // mismos valores.
+        binding.resumenRangos.visibility = View.GONE
     }
 
     private fun confirmarRangos() {
@@ -174,7 +202,13 @@ class AjustarRangosActivity : AppCompatActivity() {
         val luz = rangoLuz.slider.values
         val temp = rangoTemp.slider.values
 
-        if (humedad[1] - humedad[0] < ANCHO_MINIMO_HUMEDAD) {
+        if (!ValidacionesHuerta.rangosDeHuertaValidos(
+                humedadMin = humedad[0], humedadMax = humedad[1],
+                phMin = ph[0], phMax = ph[1],
+                luzMin = luz[0], luzMax = luz[1],
+                tempMin = temp[0], tempMax = temp[1]
+            )
+        ) {
             Toast.makeText(this, R.string.aviso_ancho_minimo_humedad, Toast.LENGTH_SHORT).show()
             return
         }
@@ -206,8 +240,6 @@ class AjustarRangosActivity : AppCompatActivity() {
         const val EXTRA_LUZ_MAX = "extra_luz_max"
         const val EXTRA_TEMP_MIN = "extra_temp_min"
         const val EXTRA_TEMP_MAX = "extra_temp_max"
-
-        private const val ANCHO_MINIMO_HUMEDAD = 10f
 
         fun crearIntent(context: Context, perfilId: String): Intent =
             Intent(context, AjustarRangosActivity::class.java)

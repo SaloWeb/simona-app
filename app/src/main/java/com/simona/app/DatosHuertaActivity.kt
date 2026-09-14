@@ -62,6 +62,7 @@ class DatosHuertaActivity : AppCompatActivity() {
             fotoUri = null
             binding.ivFotoPreview.setImageDrawable(null)
             binding.ivFotoPreview.visibility = View.GONE
+            binding.ivFotoPlaceholderIcono.visibility = View.VISIBLE
             binding.tvFotoHint.visibility = View.VISIBLE
             binding.btnQuitarFoto.visibility = View.GONE
         }
@@ -78,6 +79,7 @@ class DatosHuertaActivity : AppCompatActivity() {
         }
         FotoHuertaUtil.aplicarConEsquinasRedondeadas(this, binding.ivFotoPreview, bitmap)
         binding.ivFotoPreview.visibility = View.VISIBLE
+        binding.ivFotoPlaceholderIcono.visibility = View.GONE
         binding.tvFotoHint.visibility = View.GONE
         binding.btnQuitarFoto.visibility = View.VISIBLE
     }
@@ -107,7 +109,11 @@ class DatosHuertaActivity : AppCompatActivity() {
     }
 
     private fun mostrarMarcador(x: Float, y: Float) {
-        binding.tvCroquisHint.visibility = View.GONE
+        // PLAN_MEJORAS_VISUAL_2.md, punto 7: tvCroquisHint ahora vive
+        // dentro de grupoCroquisHint (junto al ícono de pin nuevo), así
+        // que hay que ocultar el grupo entero, no solo el texto, o el
+        // ícono quedaría flotando solo sobre el marcador real.
+        binding.grupoCroquisHint.visibility = View.GONE
         binding.marcador.visibility = View.VISIBLE
         binding.marcador.translationX = x - binding.marcador.width / 2f
         binding.marcador.translationY = y - binding.marcador.height / 2f
@@ -119,7 +125,7 @@ class DatosHuertaActivity : AppCompatActivity() {
 
         var valido = true
 
-        if (nombre.isEmpty()) {
+        if (!ValidacionesHuerta.nombreValido(nombre)) {
             binding.tvErrorNombre.visibility = View.VISIBLE
             valido = false
         } else {
@@ -128,8 +134,9 @@ class DatosHuertaActivity : AppCompatActivity() {
 
         // WPA2 exige mínimo 8 caracteres: WifiNetworkSpecifier.setWpa2Passphrase()
         // lanza IllegalArgumentException con contraseñas más cortas (sección
-        // 8.3 del Plan de Desarrollo), así que se valida acá antes de guardar.
-        if (password.length < 8) {
+        // 8.3 del Plan de Desarrollo), así que se valida acá antes de guardar
+        // (lógica en ValidacionesHuerta.passwordValida(), PLAN_MEJORAS_20.md #16).
+        if (!ValidacionesHuerta.passwordValida(password)) {
             binding.tvErrorPassword.visibility = View.VISIBLE
             valido = false
         } else {
