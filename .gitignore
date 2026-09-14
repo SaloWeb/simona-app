@@ -10,3 +10,10 @@
 local.properties
 app/build/
 app/src/main/res/values/secrets.xml
+
+# Dump generado para pegarle a una IA — se desactualiza solo, no debe versionarse
+# (ver PLAN_MEJORAS_20.md, punto 20)
+repomix-output.xml
+*.txt.crdownload
+gradle.properties(*)
+local.properties(*)
