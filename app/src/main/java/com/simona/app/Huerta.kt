@@ -23,6 +23,11 @@ data class Huerta(
     val tempMax: Float,
     val ultimaLectura: LecturaHuerta? = null,
     val ultimaActualizacion: Long? = null,
+    // PLAN_MEJORAS_20.md, punto 8: serie temporal acotada (últimos
+    // MAX_PUNTOS_HISTORIAL puntos, ver HuertaRepository) para alimentar
+    // GraficoTendenciaView en DetalleHuertaActivity. Antes de esto la app
+    // no tenía de dónde sacar una curva propia, solo ultimaLectura.
+    val historial: List<PuntoHistorial> = emptyList(),
     // Paso 3 (opcional): posición del marcador en el croquis genérico
     val posicionMapaX: Float? = null,
     val posicionMapaY: Float? = null,

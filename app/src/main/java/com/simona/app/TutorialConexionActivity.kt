@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.simona.app.databinding.ActivityTutorialConexionBinding
@@ -65,6 +67,7 @@ class TutorialConexionActivity : AppCompatActivity() {
         }
         huerta = huertaGuardada
 
+        binding.btnVolver.setOnClickListener { finish() }
         binding.tvHuertaNombre.text = huerta.nombre
         binding.btnConectar.setOnClickListener { iniciarConexion() }
 
@@ -295,9 +298,17 @@ class TutorialConexionActivity : AppCompatActivity() {
     private fun resolverUrlBase(): String =
         wifiManager.resolverUrl(getString(R.string.dashboard_url))
 
+    /**
+     * Cambio de arquitectura (ver CONTEXTO_PROYECTO.md secciones 2/3): esto
+     * abría DashboardActivity (WebView contra el HTML del ESP32). Ahora que
+     * el dispositivo dejó de servir esa UI, se abre directo
+     * DetalleHuertaActivity en modo conectado — misma pantalla que la
+     * ficha offline, pero con polling propio a /data y los controles de
+     * riego manual/refill habilitados.
+     */
     private fun abrirDashboard() {
         detenerPollingRssi()
-        startActivity(DashboardActivity.crearIntent(this, huerta.id))
+        startActivity(DetalleHuertaActivity.crearIntent(this, huerta.id, modoConectado = true))
         finish()
     }
 
@@ -324,8 +335,37 @@ class TutorialConexionActivity : AppCompatActivity() {
                 binding.btnConectar.isEnabled = true
                 binding.btnConectar.text = getString(R.string.btn_retry)
                 binding.tvEstadoSubtitulo.text = nuevoEstado.mensaje
+                // PLAN_MEJORAS_20.md, punto 9: solo se ofrece el diagnóstico
+                // guiado cuando ya hubo un intento fallido, no antes.
+                binding.btnVerDiagnostico.visibility = View.VISIBLE
+                binding.btnVerDiagnostico.setOnClickListener { mostrarDialogoDiagnostico() }
             }
         }
+        if (nuevoEstado !is ConnectionState.Error) {
+            binding.btnVerDiagnostico.visibility = View.GONE
+        }
+    }
+
+    /**
+     * PLAN_MEJORAS_20.md, punto 9: dialog_diagnostico_wifi.xml existía como
+     * layout diseñado pero nunca conectado a ninguna Activity. Se infla acá,
+     * cuando el usuario pide ayuda explícitamente desde el estado de error.
+     */
+    private fun mostrarDialogoDiagnostico() {
+        val vista = LayoutInflater.from(this).inflate(R.layout.dialog_diagnostico_wifi, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(vista)
+            .setCancelable(true)
+            .create()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        vista.findViewById<View>(R.id.btnCerrarDiagnostico).setOnClickListener { dialog.dismiss() }
+        vista.findViewById<View>(R.id.btnReintentarDiagnostico).setOnClickListener {
+            dialog.dismiss()
+            iniciarConexion()
+        }
+
+        dialog.show()
     }
 
     companion object {

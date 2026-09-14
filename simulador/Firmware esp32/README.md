@@ -2,16 +2,17 @@
 
 Firmware real para el dispositivo de **una huerta**. Es la contraparte de
 `simulador/servidor_simulado.py`: expone los mismos endpoints HTTP, con el
-mismo formato de JSON y el mismo dashboard, para que la app Android y el
-propio dashboard no necesiten saber si están hablando con el simulador o
-con el hardware real.
+mismo formato de JSON, para que la app Android no necesite saber si está
+hablando con el simulador o con el hardware real. Es 100% backend — no
+sirve ningún HTML de dashboard (ese cambio de arquitectura ya se hizo
+tanto acá como en el simulador; el análisis visual y los controles viven
+100% en `DetalleHuertaActivity`, nativa en la app Android).
 
 ## Archivos
 
 | Archivo | Contenido |
 |---|---|
 | `firmware_simona.ino` | Lógica principal: WiFi AP, sensores, riego, servidor HTTP |
-| `dashboard_html.h` | El HTML del dashboard (idéntico al del simulador), en PROGMEM |
 | `README.md` | Este archivo |
 
 ## Requisitos
@@ -95,7 +96,9 @@ Para preparar el ESP32 de una segunda huerta, alcanza con cambiar
 Con el ESP32 encendido y conectado por WiFi a la red `SIMONA` (contraseña
 `AP_PASSWORD`), desde el navegador del celular o la compu:
 
-- `http://192.168.4.1/` → dashboard visual.
+- `http://192.168.4.1/` → JSON de ping/estado-vivo con la lista de
+  endpoints (ya no hay dashboard visual acá, ver nota de arquitectura
+  al principio de este README).
 - `http://192.168.4.1/data` → JSON de telemetría liviana.
 - `http://192.168.4.1/estado` → JSON completo (config + estado + historial).
 

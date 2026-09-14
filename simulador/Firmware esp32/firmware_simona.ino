@@ -4,14 +4,20 @@
   ============================================================================
   Contraparte real de simulador/servidor_simulado.py. Expone los MISMOS
   endpoints HTTP, con el mismo "shape" de JSON, para que la app Android
-  (WifiConnectionManager, DashboardActivity) y el propio dashboard HTML no
-  necesiten saber si están hablando con el simulador o con el hardware real.
+  (WifiConnectionManager + DetalleHuertaActivity, en modo conectado) no
+  necesite saber si está hablando con el simulador o con el hardware real.
 
   Responsabilidades de este firmware (sección 2 y 5 del Plan de Desarrollo):
     - Levantar un Access Point WiFi propio (SSID "SIMONA", fijo y compartido
       por todas las huertas; lo que distingue a ESTE dispositivo es SU
       contraseña — ver HUERTA_WIFI_PASSWORD más abajo).
-    - Servir el dashboard HTML en GET / (mismo archivo que ve el simulador).
+    - Ser SOLO backend: exponer datos (/data, /estado, /export_csv) y
+      aceptar comandos (/config, /riego_manual, /refill_tanque). Ya NO
+      sirve ningún HTML de dashboard — se sacó de acá (ver
+      CONTEXTO_PROYECTO.md secciones 2/3 y servidor_simulado.py, que
+      pasó por el mismo cambio antes): el análisis visual y los
+      controles viven 100% en DetalleHuertaActivity, nativa en la app
+      Android.
     - Medir sensores reales cada 1 segundo y exponerlos en /data y /estado.
     - Ejecutar la lógica de riego automático por histéresis, con corte de
       seguridad por tiempo y cooldown entre ciclos — TOTALMENTE independiente
@@ -49,7 +55,6 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <DHT.h>
-#include "dashboard_html.h"
 
 // ============================================================================
 // 1) IDENTIDAD DE ESTA HUERTA (lo único que distingue a este ESP32 de otro)
@@ -315,8 +320,9 @@ String jsonEstadoCompleto() {
   return j;
 }
 
-// Telemetría liviana: mismo shape que ya consume el polling nativo de
-// DashboardActivity.kt (sección 5.3 del Plan) — subconjunto de /estado.
+// Telemetría liviana: mismo shape que consume el polling nativo de
+// DetalleHuertaActivity.kt en modo conectado (sección 5.3 del Plan) —
+// subconjunto de /estado.
 String jsonDataLiviano() {
   String j = "{";
   j += "\"humedad_suelo\":" + String(estado.humedad_suelo, 1) + ",";
@@ -378,8 +384,14 @@ void handleCORS() {
 }
 
 void handleRoot() {
+  // El dashboard HTML se sacó de acá (ver nota de arquitectura al inicio
+  // del archivo, y servidor_simulado.py que tuvo el mismo cambio antes):
+  // esto queda como un ping simple de estado, útil para confirmar a mano
+  // desde un navegador que el dispositivo está vivo, sin servir HTML de UI.
   handleCORS();
-  server.send_P(200, "text/html; charset=utf-8", DASHBOARD_HTML);
+  server.send(200, "application/json",
+    "{\"dispositivo\":\"SIMONA\",\"ok\":true,\"endpoints\":"
+    "[\"/data\",\"/estado\",\"/export_csv\",\"/config\",\"/riego_manual\",\"/refill_tanque\"]}");
 }
 
 void handleData() {

@@ -19,9 +19,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_header"
             android:orientation="vertical"
-            android:paddingStart="20dp"
+            android:paddingStart="@dimen/simona_space_lg"
             android:paddingTop="18dp"
-            android:paddingEnd="20dp"
+            android:paddingEnd="@dimen/simona_space_lg"
             android:paddingBottom="22dp">
 
             <LinearLayout
@@ -38,7 +38,7 @@
                     android:clickable="true"
                     android:contentDescription="Volver"
                     android:focusable="true"
-                    android:padding="8dp"
+                    android:padding="@dimen/simona_space_xs"
                     android:src="@drawable/ic_volver"
                     app:tint="@color/simona_on_color" />
 
@@ -74,7 +74,55 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/simona_space">
+
+            <LinearLayout
+                android:id="@+id/bannerConectado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/simona_space_sm"
+                android:background="@drawable/bg_chip_capa_seleccionado"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/simona_space"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/detalle_banner_conectado_titulo"
+                        android:textColor="@color/simona_on_color"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/detalle_banner_conectado_desc"
+                        android:textColor="@color/simona_on_color"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btnDesconectar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/simona_space_xs"
+                    android:text="@string/detalle_btn_desconectar"
+                    android:textColor="@color/simona_on_color"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/estadoSinLecturas"
@@ -83,14 +131,14 @@
                 android:background="@drawable/bg_chip_resumen"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="24dp"
+                android:padding="@dimen/simona_space_xl"
                 android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Todavía no hay lecturas de esta huerta."
+                    android:text="@string/detalle_sin_lecturas_titulo"
                     android:textColor="@color/simona_tinta"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -98,10 +146,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/simona_space_xs"
                     android:gravity="center"
                     android:lineSpacingExtra="2dp"
-                    android:text="Conectate al dispositivo desde el dashboard en vivo para empezar a registrar datos."
+                    android:text="@string/detalle_sin_lecturas_desc"
                     android:textColor="@color/simona_tinta_suave"
                     android:textSize="12sp" />
 
@@ -110,8 +158,15 @@
                     style="@style/Widget.Simona.Button.Primary"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Ir al dashboard en vivo" />
+                    android:layout_marginTop="@dimen/simona_space"
+                    android:text="@string/detalle_ir_dashboard" />
+
+                <ProgressBar
+                    android:id="@+id/progressEsperandoDatos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/simona_space"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -127,7 +182,7 @@
                     android:background="@drawable/bg_chip_resumen"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/simona_space">
 
                     <com.simona.app.GaugeHumedadView
                         android:id="@+id/gaugeHumedad"
@@ -138,16 +193,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/simona_space_sm"
                     android:background="@drawable/bg_chip_resumen"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/simona_space">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="12dp"
-                        android:text="Mapa de métricas"
+                        android:paddingBottom="@dimen/simona_space_sm"
+                        android:text="@string/detalle_mapa_metricas"
                         android:textColor="@color/simona_tinta_suave"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -161,15 +216,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/simona_space_sm"
                     android:background="@drawable/bg_chip_resumen"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="@dimen/simona_space">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:contentDescription="@null"
                         android:src="@drawable/ic_tanque"
                         app:tint="@color/simona_azul" />
 
@@ -183,7 +239,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Depósito de agua"
+                            android:text="@string/detalle_deposito_agua"
                             android:textColor="@color/simona_tinta_suave"
                             android:textSize="12sp" />
 
@@ -206,12 +262,113 @@
                         tools:text="Riego apagado" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/controlesEnVivo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/simona_space_sm"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRiegoManual"
+                        style="@style/Widget.Simona.Button.Primary"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="@string/detalle_riego_manual_activar" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRefillTanque"
+                        style="@style/Widget.Simona.Button.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/simona_space_sm"
+                        android:layout_weight="1"
+                        android:text="@string/detalle_btn_refill_tanque" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnChatSimona"
+                    style="@style/Widget.Simona.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="@dimen/simona_space_sm"
+                    android:text="@string/detalle_btn_chat_simona"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_asistente_simona"
+                    app:iconGravity="textStart" />
+
+                <LinearLayout
+                    android:id="@+id/cardTendencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/simona_space_sm"
+                    android:background="@drawable/bg_chip_resumen"
+                    android:orientation="vertical"
+                    android:padding="@dimen/simona_space"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/detalle_tendencia_reciente"
+                            android:textColor="@color/simona_tinta_suave"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/chipTendenciaHumedad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_chip_capa_seleccionado"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingStart="@dimen/simona_space_sm"
+                            android:paddingTop="6dp"
+                            android:paddingEnd="@dimen/simona_space_sm"
+                            android:paddingBottom="6dp"
+                            android:text="@string/detalle_chip_humedad"
+                            android:textColor="@color/simona_on_color"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/chipTendenciaTemp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_chip_capa"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingStart="@dimen/simona_space_sm"
+                            android:paddingTop="6dp"
+                            android:paddingEnd="@dimen/simona_space_sm"
+                            android:paddingBottom="6dp"
+                            android:text="@string/detalle_chip_temp"
+                            android:textColor="@color/simona_tinta"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <com.simona.app.GraficoTendenciaView
+                        android:id="@+id/graficoTendencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/simona_space_xs" />
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/txtUltimaActualizacion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingTop="12dp"
+                    android:paddingTop="@dimen/simona_space_sm"
                     android:textColor="@color/simona_tinta_suave"
                     android:textSize="11sp"
                     tools:text="Última lectura: hace 8s" />

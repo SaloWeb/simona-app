@@ -71,7 +71,8 @@ class WifiConnectionManager(
      * password: contraseña de la huerta específica a la que se quiere
      *           conectar (sección 14.4 — cada huerta tiene la suya).
      * onConnected: la red está disponible y el proceso ya quedó atado a ella
-     *              (bindProcess). A partir de acá se puede cargar el dashboard.
+     *              (bindProcess). A partir de acá se puede abrir
+     *              DetalleHuertaActivity en modo conectado.
      * onError: falló la conexión (timeout, red no encontrada, contraseña
      *          incorrecta — Android no distingue estos dos últimos casos).
      * onLost: la conexión se perdió en pleno uso (el usuario se alejó del ESP32).
@@ -110,8 +111,10 @@ class WifiConnectionManager(
                 cancelTimeout()
                 network = net
                 huertaIdConectada = huertaId
-                // Ata TODO el proceso (incluido el WebView) a la red de SIMONA,
-                // sin tocar la red por defecto del sistema. Ver sección 5.2.
+                // Ata TODO el proceso a la red de SIMONA (incluidas las
+                // peticiones HTTP nativas de DetalleHuertaActivity —
+                // polling a /data, /riego_manual, /refill_tanque), sin
+                // tocar la red por defecto del sistema. Ver sección 5.2.
                 cm?.bindProcessToNetwork(net)
                 Log.d(TAG, "Conectado a $ssid (huerta $huertaId)")
                 onConnected(net)
@@ -223,11 +226,12 @@ class WifiConnectionManager(
 
     /**
      * Fase 4.1 — antes vivía duplicado (con variaciones menores) como
-     * resolverUrlBase() privado en TutorialConexionActivity y en
-     * DashboardActivity. Se centraliza acá porque la lógica depende pura y
-     * exclusivamente del estado de ESTE manager (obtenerIpGateway()), no de
-     * nada propio de ninguna de las dos Activities — es lógica de conexión,
-     * no de UI.
+     * resolverUrlBase() privado en TutorialConexionActivity y en la ya
+     * eliminada DashboardActivity; hoy el mismo duplicado existe entre
+     * TutorialConexionActivity y DetalleHuertaActivity. Se centraliza acá
+     * porque la lógica depende pura y exclusivamente del estado de ESTE
+     * manager (obtenerIpGateway()), no de nada propio de ninguna de las
+     * Activities — es lógica de conexión, no de UI.
      *
      * Toma una URL ya configurada (típicamente R.string.dashboard_url, que
      * define esquema y puerto — ver README "Modo demo vs. modo hardware
@@ -248,6 +252,15 @@ class WifiConnectionManager(
             // el flujo: caemos a la URL fija de siempre.
             urlConfigurada.trimEnd('/')
         }
+    }
+
+    /**
+     * Restaura el binding del proceso a la red del ESP32 si sigue conectada.
+     * Se llama después de hacer peticiones de red externas (como la IA
+     * Gemini, que necesita su propia red de internet real en paralelo).
+     */
+    fun rebindProcess() {
+        network?.let { cm?.bindProcessToNetwork(it) }
     }
 
     /**

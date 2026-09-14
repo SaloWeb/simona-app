@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    PLAN_MEJORAS_VISUAL_2.md, punto 1: esta pantalla era la única del flujo
+    de conexión sin header (sin flecha "Volver" ni título), y al centrar
+    todo el contenido verticalmente con android:gravity="center" sobre un
+    match_parent, dejaba ~65% de la pantalla vacía en dispositivos chicos
+    (medido en captura real de 720x1650). Se agrega el mismo bloque de
+    header que ya usan AjustarRangosActivity/DatosHuertaActivity/
+    DetalleHuertaActivity (bg_header + btnVolver + TextAppearance.Simona.
+    HeaderTitle), y el contenido pasa a anclarse arriba (gravity="top") con
+    un margen fijo en vez de centrarse en todo el alto disponible.
+-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,112 +17,160 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/simona_superficie"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="20dp">
-
-    <FrameLayout
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/bg_icon_circle"
-        android:backgroundTint="@color/simona_azul_suave">
-
-        <ImageView
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/senal_wifi_descripcion"
-            android:src="@drawable/ic_wifi_signal"
-            app:tint="@color/simona_azul" />
-    </FrameLayout>
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_chip_resumen"
+        android:background="@drawable/bg_header"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/simona_space_lg">
+
+        <ImageView
+            android:id="@+id/btnVolver"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Volver"
+            android:focusable="true"
+            android:padding="@dimen/simona_space_xs"
+            android:src="@drawable/ic_volver"
+            app:tint="@color/simona_on_color" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text="@string/tutorial_header_titulo"
+            android:textAppearance="@style/TextAppearance.Simona.HeaderTitle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top|center_horizontal"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="@dimen/simona_space_lg">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Conexión WiFi"
-            android:textColor="@color/simona_tinta_suave"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvHuertaNombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:textColor="@color/simona_tinta"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            tools:text="Huerta del fondo" />
-
-        <TextView
-            android:id="@+id/tvEstadoSubtitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:lineSpacingExtra="2dp"
-            android:textColor="@color/simona_tinta_suave"
-            android:textSize="14sp"
-            tools:text="Acercate al dispositivo de la huerta y tocá Conectar" />
-
-        <LinearLayout
-            android:id="@+id/filaSenalWifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="18dp"
-            android:background="@color/simona_azul_suave"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="8dp"
-            android:visibility="gone"
-            tools:visibility="visible">
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="@dimen/simona_space_xl"
+            android:layout_marginBottom="@dimen/simona_space_lg"
+            android:background="@drawable/bg_icon_circle"
+            android:backgroundTint="@color/simona_azul_suave">
 
             <ImageView
-                android:id="@+id/imgSenalWifi"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
                 android:contentDescription="@string/senal_wifi_descripcion"
                 android:src="@drawable/ic_wifi_signal"
-                app:tint="@color/simona_verde" />
+                app:tint="@color/simona_azul" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_chip_resumen"
+            android:orientation="vertical"
+            android:padding="@dimen/simona_space_xl">
 
             <TextView
-                android:id="@+id/tvSenalWifi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
+                android:text="@string/tutorial_conexion_titulo"
+                android:textColor="@color/simona_tinta_suave"
                 android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvHuertaNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/simona_space_sm"
+                android:gravity="center"
+                android:textColor="@color/simona_tinta"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                tools:text="Señal buena" />
+                tools:text="Huerta del fondo" />
+
+            <TextView
+                android:id="@+id/tvEstadoSubtitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/simona_space_xs"
+                android:gravity="center"
+                android:lineSpacingExtra="2dp"
+                android:textColor="@color/simona_tinta_suave"
+                android:textSize="14sp"
+                tools:text="Acercate al dispositivo de la huerta y tocá Conectar" />
+
+            <LinearLayout
+                android:id="@+id/filaSenalWifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="18dp"
+                android:background="@color/simona_azul_suave"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/simona_space_sm"
+                android:paddingTop="@dimen/simona_space_xs"
+                android:paddingEnd="@dimen/simona_space_sm"
+                android:paddingBottom="@dimen/simona_space_xs"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/imgSenalWifi"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@string/senal_wifi_descripcion"
+                    android:src="@drawable/ic_wifi_signal"
+                    app:tint="@color/simona_verde" />
+
+                <TextView
+                    android:id="@+id/tvSenalWifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="Señal buena" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/simona_space_lg"
+                android:indeterminateTint="@color/simona_azul"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConectar"
+                style="@style/Widget.Simona.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="22dp"
+                android:text="@string/btn_connect" />
+
+            <!-- PLAN_MEJORAS_20.md, punto 9: solo visible en ConnectionState.Error,
+                 abre dialog_diagnostico_wifi.xml. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVerDiagnostico"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/simona_space_xxs"
+                android:text="@string/btn_ver_diagnostico"
+                android:visibility="gone" />
         </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:indeterminateTint="@color/simona_azul"
-            android:visibility="gone" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnConectar"
-            style="@style/Widget.Simona.Button.Primary"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="22dp"
-            android:text="@string/btn_connect" />
     </LinearLayout>
 </LinearLayout>

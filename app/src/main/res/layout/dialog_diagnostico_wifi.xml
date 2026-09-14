@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_card_huerta"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="@dimen/simona_space_lg">
 
     <!-- Header del Diálogo -->
     <LinearLayout
@@ -25,6 +25,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_wifi_signal"
                 app:tint="@color/simona_rojo" />
         </FrameLayout>
@@ -32,7 +33,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="@dimen/simona_space_sm"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -48,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="Asistente de resolución de problemas"
+                android:text="@string/diagnostico_titulo_dialogo"
                 android:textColor="@color/simona_tinta_suave"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -61,7 +62,7 @@
             android:clickable="true"
             android:contentDescription="Cerrar"
             android:focusable="true"
-            android:padding="8dp"
+            android:padding="@dimen/simona_space_xs"
             android:src="@drawable/ic_cerrar"
             app:tint="@color/simona_tinta_suave" />
     </LinearLayout>
@@ -69,8 +70,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginTop="@dimen/simona_space_sm"
+        android:layout_marginBottom="@dimen/simona_space_sm"
         android:background="@color/simona_linea" />
 
     <ScrollView
@@ -85,7 +86,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="@dimen/simona_space_sm"
                 android:text="@string/diagnostico_subtitulo"
                 android:textColor="@color/simona_tinta_suave"
                 android:textSize="13sp" />
@@ -113,7 +114,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/simona_space_sm"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -159,7 +160,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/simona_space_sm"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -205,7 +206,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/simona_space_sm"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -251,7 +252,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="@dimen/simona_space_sm"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -279,7 +280,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/simona_space"
         android:gravity="end"
         android:orientation="horizontal">
 

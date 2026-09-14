@@ -95,8 +95,24 @@ class GaugeHumedadView @JvmOverloads constructor(
         valorActual = valor.coerceIn(EJE_MIN, EJE_MAX)
         humedadMin = min
         humedadMax = max
+        // PLAN_MEJORAS_20.md, punto 19: es un View de Canvas puro — sin esto,
+        // TalkBack no anuncia nada al enfocarlo (el porcentaje es solo
+        // píxeles dibujados, no texto real).
+        contentDescription = context.getString(
+            R.string.gauge_humedad_descripcion,
+            valorActual.toInt(),
+            estadoDescripcionAccesible()
+        )
         invalidate()
     }
+
+    private fun estadoDescripcionAccesible(): String = context.getString(
+        when {
+            valorActual <= humedadMin -> R.string.home_estado_seco
+            valorActual >= humedadMax -> R.string.home_estado_humedo
+            else -> R.string.home_estado_optimo
+        }
+    )
 
     private fun estadoColor(): Int = when {
         valorActual <= humedadMin -> colorSeco
