@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Reglas de backup para Android < 12 (Auto Backup clásico, API 23-30).
+    Excluye "simona_huertas" (SharedPreferences de HuertaRepository) porque
+    guarda las contraseñas WiFi de cada huerta en texto plano — no deben
+    terminar en el backup automático a Google Drive del celular.
+    Ver PLAN_MEJORAS_20.md, punto 3.
+-->
+<full-backup-content>
+    <exclude domain="sharedpref" path="simona_huertas.xml" />
+</full-backup-content>

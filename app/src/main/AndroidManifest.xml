@@ -14,6 +14,8 @@
     <application
         android:name=".SimonaApp"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Simona"
@@ -33,6 +35,7 @@
         -->
         <activity
             android:name=".SplashActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Simona.Splash">
@@ -42,43 +45,50 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".DashboardActivity"
-            android:exported="false"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Simona.NoActionBar" />
-
         <!-- Fase 5.4 — pantalla de detalle offline con el mini-mapa
              multicapa (MiniMapaCapasView). No usa Theme.Simona.NoActionBar
-             como el dashboard: es 100% nativa, no una pantalla en pantalla
-             completa tipo WebView. -->
+             como el viejo dashboard (ya eliminado): es 100% nativa, no una
+             pantalla en pantalla completa tipo WebView.
+
+             Cambio de arquitectura (CONTEXTO_PROYECTO.md secciones 2/3):
+             esta misma Activity ahora también cumple el rol del dashboard
+             "en vivo" (modoConectado=true, ver DetalleHuertaActivity.kt),
+             abierta desde TutorialConexionActivity al terminar de
+             conectar. DashboardActivity (WebView contra el HTML del ESP32,
+             que el dispositivo ya no sirve) se eliminó del proyecto. -->
         <activity
             android:name=".DetalleHuertaActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/app_name" />
 
         <activity
             android:name=".SeleccionarPerfilActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/app_name" />
 
         <activity
             android:name=".AjustarRangosActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/app_name" />
 
         <activity
             android:name=".DatosHuertaActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/app_name" />
 
         <activity
             android:name=".TutorialConexionActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/app_name" />
 
         <activity
             android:name=".MapaHuertasActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/app_name" />
 
